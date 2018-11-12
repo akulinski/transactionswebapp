@@ -1,12 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <p>
-        HELLO WORD
-    </p>
-</body>
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <title>Web tool (temp)</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    </head>
+    <body onload="onLoad();">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Web tool (temp)</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">Strona główna <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/transactions">Wgląd</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/users">Użytkownicy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add">Dodawanie</a>
+                  </li>
+              </ul>
+              <a href="/login" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-forward"></span> Zaloguj się</a>
+            </div>
+        </nav>
+        <section>
+
+        </section>
+        <footer>
+
+        </footer>
+    </body>
 </html>

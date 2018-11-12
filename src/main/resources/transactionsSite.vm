@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <title>Web tool (temp)</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <script src="scripts/wglad.js"></script>
+    </head>
+    <body onload="onload();">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Web tool (temp)</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="/">Strona główna <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                  <a class="nav-link" href="/transactions">Wgląd</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/users">Użytkownicy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add">Dodawanie</a>
+                  </li>
+              </ul>
+              <a href="/login" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-forward"></span> Zaloguj się</a>
+            </div>
+        </nav>
+        <section>
+          <div class="card">
+              <div class="card-header">Wgląd</div>
+              <div class="card-body">
+                <form>
+                    <div class="form-row align-items-center">
+                      <div class="col-sm-3 my-1">
+                          <div class="input-group">
+                              <input type="date" class="form-control" id="datePickerFrom" name="datePickerFrom">
+                              <div class="input-group-append">
+                                  <div class="input-group-text"><span class="fa fa-calendar"></span></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-sm-3 my-1">
+                          <div class="input-group">
+                              <input type="date" class="form-control" id="datePickerTo" name="datePickerTo">
+                              <div class="input-group-append">
+                                  <div class="input-group-text"><span class="fa fa-calendar"></span></div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="col-auto my-1">
+                          <select class="form-control" id="selectId" name="selectId"></select>
+                      </div>
+                      <div class="col-auto my-1">
+                          <select class="form-control" id="selectUser" name="selectUser"></select>
+                      </div>
+                      <div class="col-auto my-1">
+                        <button type="button" class="btn btn-primary" id="submitButton">Przeglądaj</button>
+                      </div>
+                    </div>
+                </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Rozpiska</div>
+            <div class="card-body" id="cardInfo">
+              
+            </div>
+          </div>
+        </section>
+        <footer>
+
+        </footer>
+    </body>
+</html>
