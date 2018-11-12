@@ -1,6 +1,6 @@
 package com.mrowka.transactionswebapp;
 
-import com.mrowka.transactionswebapp.core.routers.HelloWordRouter;
+import com.mrowka.transactionswebapp.core.routers.Router;
 import org.apache.log4j.BasicConfigurator;
 
 import static spark.Spark.port;
@@ -11,7 +11,7 @@ public class EntryPoint {
         BasicConfigurator.configure();
         port(8080);
 
-        HelloWordRouter helloWordRouter = new HelloWordRouter();
-        helloWordRouter.setUpRoutes();
+        Router router = new Router();
+        router.setUpRoutes();
     }
 }
