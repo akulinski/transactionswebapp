@@ -7,11 +7,14 @@ import static spark.Spark.port;
 
 public class EntryPoint {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         BasicConfigurator.configure();
         port(8080);
 
         Router router = new Router();
         router.setUpRoutes();
+
+        new MockUp().mockData();
+
     }
 }
