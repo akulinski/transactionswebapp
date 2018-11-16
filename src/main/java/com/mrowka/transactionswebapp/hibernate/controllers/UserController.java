@@ -135,4 +135,39 @@ public class UserController extends GenericController {
             session.close();
         }
     }
+
+    public UserEntity getUsetByUsername(String username) {
+
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        UserEntity userEntity = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hq = "FROM UserEntity U WHERE U.login=:username";
+
+            Query query = session.createQuery(hq);
+
+            query.setParameter("username", username);
+
+            transaction.commit();
+
+            if (userEntity != null) {
+                return userEntity;
+            } else {
+                throw new IllegalStateException("No user found");
+            }
+
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            throw new IllegalStateException(ex.getMessage());
+        } finally {
+            session.close();
+        }
+
+    }
+
 }

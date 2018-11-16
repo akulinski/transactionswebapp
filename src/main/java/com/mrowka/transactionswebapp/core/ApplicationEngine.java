@@ -1,5 +1,8 @@
 package com.mrowka.transactionswebapp.core;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.mrowka.transactionswebapp.core.interceptors.LoginInterceptor;
 import com.mrowka.transactionswebapp.hibernate.entites.PrivilegeEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
@@ -18,8 +21,13 @@ public class ApplicationEngine {
 
     private static Logger logger = null;
 
+    private static LoginInterceptor loginInterceptor = null;
+
+    private static Gson gson;
+
     /**
      * Provies  same instance of Session factory for all controllers
+     *
      * @return
      */
     public static SessionFactory provideFactory() {
@@ -43,5 +51,22 @@ public class ApplicationEngine {
 
         return logger;
     }
+
+
+    public static Gson provideGson() {
+
+        if (gson == null) {
+            synchronized (ApplicationEngine.class) {
+                gson = new GsonBuilder().create();
+            }
+        }
+
+        return gson;
+    }
+
+    public static void initInterceptor() {
+        loginInterceptor = new LoginInterceptor();
+    }
+
 
 }
