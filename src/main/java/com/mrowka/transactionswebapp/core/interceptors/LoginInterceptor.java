@@ -18,10 +18,13 @@ public class LoginInterceptor {
     public LoginInterceptor() {
         userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
 
-        String[] protectedRoutes = new String[]{Urls.TRANSACTIONS.getUrl(), Urls.USERS.getUrl(), Urls.ADD.getUrl(),Urls.REGISTRATION.getUrl()};
+        String[] protectedRoutes = new String[]{Urls.TRANSACTIONS.getUrl(), Urls.USERS.getUrl(), Urls.ADD.getUrl(),Urls.REGISTRATION.getUrl(),Urls.MY_ACCOUNT.getUrl()};
 
         Filter f = (req, res) -> {
             if (req.session().attribute(ATTRIBUTE) == null) {
+
+                req.session().attribute("endpoint",req.url());
+
                 res.redirect(Urls.LOGIN.getUrl());
             }
         };

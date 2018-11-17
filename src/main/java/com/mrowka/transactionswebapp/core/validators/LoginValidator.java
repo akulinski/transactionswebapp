@@ -20,6 +20,14 @@ public class LoginValidator {
     }
 
     public boolean validate(String username, String password){
-        return userController.login(username,password);
+        boolean result = false;
+
+        try {
+            result = userController.login(username, password);
+        }catch (IllegalStateException ex){
+            ex.printStackTrace();
+        }
+
+        return result;
     }
 }
