@@ -2,7 +2,7 @@ package com.mrowka.transactionswebapp.core.validators;
 
 import com.mrowka.transactionswebapp.hibernate.controllers.ControllerFactory;
 import com.mrowka.transactionswebapp.hibernate.controllers.UserController;
-import com.mrowka.transactionswebapp.util.FactoriesTypes;
+import com.mrowka.transactionswebapp.util.ControllerTypes;
 
 public class LoginValidator {
 
@@ -16,7 +16,7 @@ public class LoginValidator {
 
 
     private LoginValidator() {
-        userController = (UserController) ControllerFactory.provideController(FactoriesTypes.USER_CONTROLLER.getType());
+        userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
     }
 
     public boolean validate(String username, String password){

@@ -6,10 +6,12 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Entity
 @Table(name = "store")
+@Transactional
 public class StoreEntity {
 
     @Id
