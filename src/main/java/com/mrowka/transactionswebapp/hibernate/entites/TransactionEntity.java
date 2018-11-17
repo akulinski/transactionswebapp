@@ -1,10 +1,12 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Date;
 
 @Entity
 @Table(name = "transactions")
+@Transactional
 public class TransactionEntity {
 
     @Id

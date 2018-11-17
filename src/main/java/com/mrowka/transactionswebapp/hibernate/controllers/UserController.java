@@ -152,6 +152,7 @@ public class UserController extends GenericController {
             Query query = session.createQuery(hq);
 
             query.setParameter("username", username);
+            userEntity = (UserEntity) query.getSingleResult();
 
             transaction.commit();
 

@@ -3,7 +3,7 @@ package com.mrowka.transactionswebapp.util;
 /**
  * Types of controllers for controller factory
  */
-public enum FactoriesTypes {
+public enum ControllerTypes {
 
     USER_CONTROLLER("user"),
     PRIVILEGE_CONTROLLER("privilege"),
@@ -12,7 +12,7 @@ public enum FactoriesTypes {
 
     private String type;
 
-    FactoriesTypes(String type){
+    ControllerTypes(String type){
         this.type = type;
     }
 
