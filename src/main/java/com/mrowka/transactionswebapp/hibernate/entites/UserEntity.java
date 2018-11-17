@@ -6,11 +6,13 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@Transactional
 public class UserEntity {
 
     @Id
@@ -30,7 +32,8 @@ public class UserEntity {
     @Column(name = "dateOfJoining")
     private Date dataOfJoining;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+
+    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST)
     private StoreEntity storeEntity;
 
     @Fetch(FetchMode.SELECT)

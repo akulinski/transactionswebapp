@@ -1,8 +1,7 @@
 package com.mrowka.transactionswebapp.hibernate.controllers;
 
-import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
-import com.mrowka.transactionswebapp.util.FactoriesTypes;
+import com.mrowka.transactionswebapp.util.ControllerTypes;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,8 +17,8 @@ public class UserControllerTest {
 
     @Before
     public void init(){
-        userController = (UserController) ControllerFactory.provideController(FactoriesTypes.USER_CONTROLLER.getType());
-        storeController = (StoreController) ControllerFactory.provideController(FactoriesTypes.STORE_CONTROLLER.getType());
+        userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
+        storeController = (StoreController) ControllerFactory.provideController(ControllerTypes.STORE_CONTROLLER.getType());
         storeController.addStore("store","store",true);
     }
 
