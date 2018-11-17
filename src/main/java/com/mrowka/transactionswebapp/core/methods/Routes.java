@@ -133,6 +133,8 @@ public class Routes {
 
         privilegeController.addPrivilege(Integer.parseInt(type),userEntity);
 
+        model.put("createdUser",userEntity);
+
         return new VelocityTemplateEngine().render(
                 new ModelAndView(model, "registration/registerPage.vm")
         );
