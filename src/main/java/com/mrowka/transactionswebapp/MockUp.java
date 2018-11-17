@@ -3,7 +3,7 @@ package com.mrowka.transactionswebapp;
 import com.mrowka.transactionswebapp.hibernate.controllers.*;
 import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
-import com.mrowka.transactionswebapp.util.FactoriesTypes;
+import com.mrowka.transactionswebapp.util.ControllerTypes;
 import com.mrowka.transactionswebapp.util.RandomStringGenerator;
 
 import java.util.Date;
@@ -19,10 +19,10 @@ public class MockUp {
     private TransactionController transactionController;
 
     public MockUp() {
-        userController = (UserController) ControllerFactory.provideController(FactoriesTypes.USER_CONTROLLER.getType());
-        storeController = (StoreController) ControllerFactory.provideController(FactoriesTypes.STORE_CONTROLLER.getType());
-        privilegeController = (PrivilegeController) ControllerFactory.provideController(FactoriesTypes.PRIVILEGE_CONTROLLER.getType());
-        transactionController = (TransactionController) ControllerFactory.provideController(FactoriesTypes.TRANSACTION_CONTROLLER.getType());
+        userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
+        storeController = (StoreController) ControllerFactory.provideController(ControllerTypes.STORE_CONTROLLER.getType());
+        privilegeController = (PrivilegeController) ControllerFactory.provideController(ControllerTypes.PRIVILEGE_CONTROLLER.getType());
+        transactionController = (TransactionController) ControllerFactory.provideController(ControllerTypes.TRANSACTION_CONTROLLER.getType());
     }
 
     public void mockData() {

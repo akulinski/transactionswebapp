@@ -1,9 +1,11 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 @Entity
 @Table(name = "privilege")
+@Transactional
 public class PrivilegeEntity {
 
     @Id
