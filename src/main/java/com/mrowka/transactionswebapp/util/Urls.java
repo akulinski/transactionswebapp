@@ -7,7 +7,8 @@ public enum Urls {
     LOGIN("/login"),
     ADD("/add"),
     USERS("/users"),
-    REGISTRATION("/register");
+    REGISTRATION("/register"),
+    MY_ACCOUNT("/myaccount");
 
     private String url;
 
