@@ -34,5 +34,8 @@ public class Router {
         get(Urls.REGISTRATION.getUrl(),routes::renderRegistrationPage);
         post(Urls.REGISTRATION.getUrl(),routes::processRegistrationPage);
 
+        get(Urls.MY_ACCOUNT.getUrl(),routes::renderManageAccountPage);
+        post(Urls.MY_ACCOUNT.getUrl(),routes::processUpdate);
+
     }
 }

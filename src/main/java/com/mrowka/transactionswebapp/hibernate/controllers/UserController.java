@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 
+import javax.persistence.NoResultException;
 import java.util.Date;
 
 public class UserController extends GenericController {
@@ -77,7 +78,7 @@ public class UserController extends GenericController {
         return userId;
     }
 
-    public boolean login(String username, String password) {
+    public boolean login(String username, String password) throws IllegalStateException{
         Session session = factory.openSession();
 
         Transaction transaction = null;
@@ -97,9 +98,12 @@ public class UserController extends GenericController {
             if (userEntity != null) {
                 return true;
             }
-        } catch (HibernateException ex) {
+        } catch (HibernateException ex ) {
             ex.printStackTrace();
-        } finally {
+            throw new IllegalStateException(ex.getMessage());
+        } catch (NoResultException ex){
+            throw new IllegalStateException(ex.getMessage());
+        } finally{
             session.close();
         }
         return false;
@@ -169,6 +173,24 @@ public class UserController extends GenericController {
             session.close();
         }
 
+    }
+
+    public void updateUserEntity(UserEntity userEntity) throws IllegalStateException{
+
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        try{
+            transaction = session.beginTransaction();
+            session.update(userEntity);
+            transaction.commit();
+        }catch (HibernateException ex){
+            ex.printStackTrace();
+            throw new IllegalStateException(ex.getCause());
+        }finally {
+            session.close();
+        }
     }
 
 }
