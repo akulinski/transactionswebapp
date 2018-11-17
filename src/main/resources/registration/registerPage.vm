@@ -37,7 +37,7 @@
         </div>
 
     #else
-        <output id="username" contenteditable="false"> $createdUser.username</output><br/>
+        <output id="username" contenteditable="false"> $createdUser.login</output><br/>
         <output id="password" contenteditable="false"> $createdUser.password</output><br/>
     #end
 </body>
