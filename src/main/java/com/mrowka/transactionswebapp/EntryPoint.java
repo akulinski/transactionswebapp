@@ -6,12 +6,15 @@ import org.apache.log4j.BasicConfigurator;
 
 import static spark.Spark.port;
 import static spark.Spark.staticFiles;
+import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class EntryPoint {
 
     public static void main(String[] args) {
         BasicConfigurator.configure();
         port(8080);
+        enableDebugScreen();
+
         boolean localhost = false;
 
         //localhost = true;
@@ -27,7 +30,7 @@ public class EntryPoint {
         Router router = new Router();
         router.setUpRoutes();
 
-       // new MockUp().mockData();
+        new MockUp().mockData();
 
     }
 }
