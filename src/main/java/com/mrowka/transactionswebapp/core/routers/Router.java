@@ -25,13 +25,10 @@ public class Router {
         get("/transactions", routes::showTransactions);
 
         get("/login", routes::showLoginPage);
-        post("/login", (req, res) -> {
 
-            System.out.println("-------------------------------->"+req.body());
-            System.out.println(req.session().attributes());
-            LoginModel loginModel = ApplicationEngine.provideGson().fromJson(req.body(), LoginModel.class);
-            System.out.println("------------------------------------->"+loginModel.toString());
-            return null;
-        });
+        get("/user/transactions",(r,q)-> "USERS");
+        post("/login",routes::processLoginRequest);
+
+
     }
 }

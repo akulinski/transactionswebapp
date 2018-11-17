@@ -43,5 +43,10 @@ public class MockUp {
                 transactionController.addTransaction(userEntity, transactionEntity);
             }
         }
+
+        UserEntity userEntity = new UserEntity("username","password","password",new Date());
+        userController.addUserByEntity(userEntity,storeController.getStoreById("test1"));
+        privilegeController.addPrivilege(1,userEntity);
+        transactionController.addTransaction(userEntity,new TransactionEntity(null,true,new Date(),new Date(),0));
     }
 }
