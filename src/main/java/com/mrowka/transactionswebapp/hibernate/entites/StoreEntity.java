@@ -1,5 +1,6 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
+import com.mrowka.transactionswebapp.hibernate.controllers.StoreController;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -43,6 +44,8 @@ public class StoreEntity {
 
     }
 
+
+
     public int getId() {
         return id;
     }
@@ -82,4 +85,5 @@ public class StoreEntity {
     public void setUserEntitySet(Set<UserEntity> userEntitySet) {
         this.userEntitySet = userEntitySet;
     }
+
 }

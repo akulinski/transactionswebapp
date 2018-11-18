@@ -7,7 +7,11 @@ public enum Urls {
     LOGIN("/login"),
     ADD("/add"),
     USERS("/users"),
-    REGISTRATION("/register");
+    REGISTRATION("/register"),
+    GETSTORES("/getStores"),
+    GETUSERS("/getUsers"),
+    GETTRANSACTIONS("/getTransactions"),
+    UPDATETRANSACTIONS("/updateTransactions");
 
     private String url;
 

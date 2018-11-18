@@ -1,5 +1,6 @@
 package com.mrowka.transactionswebapp.core.routers;
 
+import com.mrowka.transactionswebapp.MockUp;
 import com.mrowka.transactionswebapp.core.ApplicationEngine;
 import com.mrowka.transactionswebapp.core.methods.Routes;
 import com.mrowka.transactionswebapp.requestresponsemodel.LoginModel;
@@ -26,6 +27,10 @@ public class Router {
 
         get(Urls.INDEX.getUrl(), routes::mainSite);
         get(Urls.TRANSACTIONS.getUrl(), routes::showTransactions);
+        get(Urls.GETSTORES.getUrl(), routes::getShops);
+        get(Urls.GETUSERS.getUrl(), routes::getUsers);
+        get(Urls.GETTRANSACTIONS.getUrl(), routes::getTransactions);
+        get(Urls.UPDATETRANSACTIONS.getUrl(), routes::updateTransactions);
 
         get(Urls.LOGIN.getUrl(), routes::showLoginPage);
 
@@ -35,4 +40,5 @@ public class Router {
         post(Urls.REGISTRATION.getUrl(),routes::processRegistrationPage);
 
     }
+
 }

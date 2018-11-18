@@ -10,7 +10,7 @@ import static spark.debug.DebugScreen.enableDebugScreen;
 
 public class EntryPoint {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         BasicConfigurator.configure();
         port(8080);
         enableDebugScreen();

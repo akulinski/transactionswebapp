@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class UserController extends GenericController {
@@ -77,6 +78,33 @@ public class UserController extends GenericController {
         return userId;
     }
 
+    public int UserEntity (int id) {
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        Integer userId = null;
+        try {
+            transaction = session.beginTransaction();
+            String hq = "FROM UserEntity U WHERE U.login=:username AND U.password=:password";
+            Query query = session.createQuery(hq);
+
+
+
+            UserEntity userEntity = (UserEntity) query.getSingleResult();
+
+            transaction.commit();
+            if (userEntity != null) {
+                return 1;
+            }
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return 0;
+    }
+
     public boolean login(String username, String password) {
         Session session = factory.openSession();
 
@@ -103,6 +131,32 @@ public class UserController extends GenericController {
             session.close();
         }
         return false;
+    }
+
+    public ArrayList<UserEntity> getUsersByStoreEntity(StoreEntity storeEntity) {
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            String hq = "FROM UserEntity U WHERE U.storeEntity=:storeEntity";
+            Query query = session.createQuery(hq);
+
+            query.setParameter("storeEntity", storeEntity);
+
+            ArrayList<UserEntity> userEntity = (ArrayList<UserEntity>) query.getResultList();
+
+            transaction.commit();
+            if (userEntity != null) {
+                return userEntity;
+            }
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
     }
 
     public UserEntity getUser(String username, String password) {
@@ -136,8 +190,7 @@ public class UserController extends GenericController {
         }
     }
 
-    public UserEntity getUsetByUsername(String username) {
-
+    public UserEntity getUserByUserName(String username) {
         Session session = factory.openSession();
 
         Transaction transaction = null;
@@ -148,14 +201,13 @@ public class UserController extends GenericController {
             transaction = session.beginTransaction();
 
             String hq = "FROM UserEntity U WHERE U.login=:username";
-
             Query query = session.createQuery(hq);
 
             query.setParameter("username", username);
+
             userEntity = (UserEntity) query.getSingleResult();
 
             transaction.commit();
-
             if (userEntity != null) {
                 return userEntity;
             } else {
@@ -170,5 +222,4 @@ public class UserController extends GenericController {
         }
 
     }
-
 }
