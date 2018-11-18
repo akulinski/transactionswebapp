@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 
+
 public class StoreController extends GenericController {
 
     public StoreController(SessionFactory sessionFactory) {
@@ -16,16 +17,17 @@ public class StoreController extends GenericController {
     }
 
 
-    public Integer addStore(String storeName, String address, boolean active) {
+    public StoreEntity addStore(String storeName, String address, boolean active) {
         Session session = factory.openSession();
 
         Transaction transaction = null;
 
         Integer storeId = null;
+        StoreEntity storeEntity = null;
 
         try {
             transaction = session.beginTransaction();
-            StoreEntity storeEntity = new StoreEntity(storeName, address, active);
+            storeEntity = new StoreEntity(storeName, address, active);
             storeId = (Integer) session.save(storeEntity);
             transaction.commit();
         } catch (HibernateException ex) {
@@ -37,10 +39,43 @@ public class StoreController extends GenericController {
             session.close();
         }
 
-        return storeId;
+        return storeEntity;
     }
 
-    public StoreEntity getStoreById(String storeName) {
+    public StoreEntity getStoreById(int id) {
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        Integer storeId = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hq = "FROM StoreEntity S WHERE S.id =: id";
+
+            Query query = session.createQuery(hq);
+
+            query.setParameter("id", id);
+
+            StoreEntity storeEntity = (StoreEntity) query.getSingleResult();
+
+            transaction.commit();
+
+            return storeEntity;
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return null;
+    }
+
+    public StoreEntity getStoreByName(String storeName) {
         Session session = factory.openSession();
 
         Transaction transaction = null;
@@ -73,7 +108,7 @@ public class StoreController extends GenericController {
         return null;
     }
 
-    public ArrayList<StoreEntity> getAllStores() throws IllegalStateException{
+    public ArrayList<StoreEntity> getAllStores() throws IllegalStateException {
 
         Session session = factory.openSession();
 
@@ -81,7 +116,7 @@ public class StoreController extends GenericController {
 
         ArrayList<StoreEntity> storeEntityArrayList = null;
 
-        try{
+        try {
 
             transaction = session.beginTransaction();
 
@@ -91,12 +126,12 @@ public class StoreController extends GenericController {
 
             storeEntityArrayList = (ArrayList<StoreEntity>) query.getResultList();
 
-            if(storeEntityArrayList!=null && storeEntityArrayList.size()>0){
+            if (storeEntityArrayList != null && storeEntityArrayList.size() > 0) {
                 return storeEntityArrayList;
-            }else{
+            } else {
                 throw new IllegalStateException("No stores found");
             }
-        }catch (HibernateException ex) {
+        } catch (HibernateException ex) {
             if (transaction != null) {
                 transaction.rollback();
             }

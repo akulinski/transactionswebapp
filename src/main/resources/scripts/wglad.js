@@ -1,25 +1,30 @@
 function onload(){
     document.querySelector("#datePickerFrom").valueAsDate = new Date;
-    document.querySelector("#datePickerTo").valueAsDate = new Date;
+    let dateTo = new Date();
+    dateTo.setDate(dateTo.getDate()+1);
+    document.querySelector("#datePickerTo").valueAsDate = dateTo;
     let submitButton = document.querySelector("#submitButton");
 
-    var selectId = document.getElementById("selectId");
-    var selectUser = document.getElementById("selectUser");
-    fetch('http://localhost:7070/getShops')
+    let selectId = document.getElementById("selectId");
+    let selectUser = document.getElementById("selectUser");
+    fetch('http://localhost:8080/getStores')
     .then(function(response) {
+        console.log(response);
         return response.json();
     })
     .then(function(myJson) {
         myJson.forEach(element => {
-            var option = document.createElement("option");
-            option.text = element.nazwa;
-            option.value = element.id_sklepu;
+            console.log(element);
+            let option = document.createElement("option");
+            option.text = element.storeName;
+            option.value = element.id;
             selectId.add(option);
         });
     });
 
     selectId.onchange = ()=>{
-        fetch('http://localhost:7070/users?id_sklepu='+selectId.value)
+        selectUser.innerHTML = "";//Erasing all inside of select
+        fetch('http://localhost:8080/getUsers?shopId='+selectId.value)
         .then(function(response) {
             return response.json();
         })
@@ -41,14 +46,16 @@ function onload(){
 
 
 
-        var url = "http://localhost:7070/getTransactions?"+dateFrom.name+'='+dateFrom.value+'&'+dateTo.name+'='+dateTo.value+'&'+selectId.name+'='+selectId.value+'&'+selectUser.name+'='+selectUser.value;
+        var url = "http://localhost:8080/getTransactions?"+dateFrom.name+'='+dateFrom.value+'&'+dateTo.name+'='+dateTo.value+'&'+selectId.name+'='+selectId.value+'&'+selectUser.name+'='+selectUser.value
+        console.log(url);
         fetch(url)
         .then(function(response) {
             return response.json();
         })
         .then(function(myJson) {
+            console.log(myJson);
             myJson.forEach((element)=>{
-                if(element.rozliczony===1)addToCard('disabled', element);
+                if(element.isApproved===true)addToCard('disabled', element);
                 else addToCard('', element);
             });
         });
@@ -58,6 +65,7 @@ function addToCard(isReadOnly, jsonPart){
     let card = document.querySelector('#cardInfo');
     let div = document.createElement('div');
     let button = document.createElement('input');
+    card.innerHTML=""; //Erasing all inside of div
     div.classList.add('col-auto');
     div.classList.add('d-inline-flex');
 
@@ -77,14 +85,15 @@ function addToCard(isReadOnly, jsonPart){
             }
         });
 
-        var url = "http://localhost:7070/updateTransactions"+serialize(obj);
+        let url = "http://localhost:8080/updateTransactions" + serialize(obj);
+        console.log(url);
         fetch(url)
         .then(function(response) {
             return response.json();
         })
         .then(function(myJson) {
             myJson.forEach((element)=>{
-                if(element.rozliczony===1)addToCard('disabled', element);
+                if(element.isApproved===true)addToCard('disabled', element);
                 else addToCard('', element);
             });
         });
@@ -100,7 +109,7 @@ function addToCard(isReadOnly, jsonPart){
         element.disabled = isReadOnly;
         element.id = k;
         element.onchange=()=>button.disabled=false;
-        if(k==='id_transakcji'||k==='data_wprowadzenia')element.disabled="disabled";
+        if(k==='id'||k==='dateOfCreation'||k==="userId")element.disabled="disabled";
 
         element.classList.add("form-control");
         

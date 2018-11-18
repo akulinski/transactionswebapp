@@ -10,7 +10,11 @@ public enum Urls {
     REGISTRATION("/register"),
     MY_ACCOUNT("/myaccount"),
     MANAGE_OTHERS("/manageothers"),
-    USERS_IN_STORE_ENDPOINT("/manageothers/getusers");
+    USERS_IN_STORE_ENDPOINT("/manageothers/getusers"),
+    GET_STORES("/getStores"),
+    GET_USERS("/getUsers"),
+    GET_TRANSACTIONS("/getTransactions"),
+    UPDATE_TRANSACTIONS("/updateTransactions");
 
     private String url;
 
