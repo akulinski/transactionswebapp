@@ -31,22 +31,25 @@ public class MockUp {
 
         for (int i = 0; i < 20; i++) {
             UserEntity userEntity = new UserEntity(RandomStringGenerator.generateRandomString(6), RandomStringGenerator.generateRandomString(6), RandomStringGenerator.generateRandomString(6), new Date());
-            TransactionEntity transactionEntity = new TransactionEntity(null, true, new Date(), new Date(), 0);
+            TransactionEntity transactionEntity = new TransactionEntity(userEntity, false, new Date(), new Date(), 0);
 
             if (i % 2 == 0) {
-                userController.addUserByEntity(userEntity, storeController.getStoreById("test1"));
+                userController.addUserByEntity(userEntity, storeController.getStoreByName("test1"));
                 privilegeController.addPrivilege(1, userEntity);
                 transactionController.addTransaction(userEntity, transactionEntity);
             } else {
-                userController.addUserByEntity(userEntity, storeController.getStoreById("test2"));
+                userController.addUserByEntity(userEntity, storeController.getStoreByName("test2"));
                 privilegeController.addPrivilege(1, userEntity);
                 transactionController.addTransaction(userEntity, transactionEntity);
             }
         }
 
-        UserEntity userEntity = new UserEntity("username","password","password",new Date());
-        userController.addUserByEntity(userEntity,storeController.getStoreById("test1"));
+        UserEntity userEntity = new UserEntity("username", "password", "email",new Date());
+        userController.addUserByEntity(userEntity, storeController.getStoreById(1));
+
         privilegeController.addPrivilege(3,userEntity);
+
         transactionController.addTransaction(userEntity,new TransactionEntity(null,true,new Date(),new Date(),0));
+
     }
 }

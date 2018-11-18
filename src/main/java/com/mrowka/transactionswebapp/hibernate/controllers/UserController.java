@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 
 public class UserController extends GenericController {
 
@@ -80,7 +79,8 @@ public class UserController extends GenericController {
         return userId;
     }
 
-    public boolean login(String username, String password) throws IllegalStateException{
+
+    public boolean login(String username, String password) {
         Session session = factory.openSession();
 
         Transaction transaction = null;
@@ -100,15 +100,41 @@ public class UserController extends GenericController {
             if (userEntity != null) {
                 return true;
             }
-        } catch (HibernateException ex ) {
+        } catch (HibernateException ex) {
             ex.printStackTrace();
             throw new IllegalStateException(ex.getMessage());
-        } catch (NoResultException ex){
+        } catch (NoResultException ex) {
             throw new IllegalStateException(ex.getMessage());
-        } finally{
+        } finally {
             session.close();
         }
         return false;
+    }
+
+    public ArrayList<UserEntity> getUsersByStoreEntity(StoreEntity storeEntity) {
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+            String hq = "FROM UserEntity U WHERE U.storeEntity=:storeEntity";
+            Query query = session.createQuery(hq);
+
+            query.setParameter("storeEntity", storeEntity);
+
+            ArrayList<UserEntity> userEntity = (ArrayList<UserEntity>) query.getResultList();
+
+            transaction.commit();
+            if (userEntity != null) {
+                return userEntity;
+            }
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
     }
 
     public UserEntity getUser(String username, String password) {
@@ -142,8 +168,7 @@ public class UserController extends GenericController {
         }
     }
 
-    public UserEntity getUsetByUsername(String username) {
-
+    public UserEntity getUserByUserName(String username) {
         Session session = factory.openSession();
 
         Transaction transaction = null;
@@ -154,14 +179,13 @@ public class UserController extends GenericController {
             transaction = session.beginTransaction();
 
             String hq = "FROM UserEntity U WHERE U.login=:username";
-
             Query query = session.createQuery(hq);
 
             query.setParameter("username", username);
+
             userEntity = (UserEntity) query.getSingleResult();
 
             transaction.commit();
-
             if (userEntity != null) {
                 return userEntity;
             } else {
@@ -177,26 +201,26 @@ public class UserController extends GenericController {
 
     }
 
-    public void updateUserEntity(UserEntity userEntity) throws IllegalStateException{
+    public void updateUserEntity(UserEntity userEntity) throws IllegalStateException {
 
         Session session = factory.openSession();
 
         Transaction transaction = null;
 
-        try{
+        try {
             transaction = session.beginTransaction();
             session.update(userEntity);
             transaction.commit();
-        }catch (HibernateException ex){
+        } catch (HibernateException ex) {
             ex.printStackTrace();
             throw new IllegalStateException(ex.getCause());
-        }finally {
+        } finally {
             session.close();
         }
     }
 
 
-    public ArrayList<UserEntity> getAllUsersInStore(StoreEntity storeEntity) throws IllegalStateException{
+    public ArrayList<UserEntity> getAllUsersInStore(StoreEntity storeEntity) throws IllegalStateException {
 
         Session session = factory.openSession();
 
@@ -204,7 +228,7 @@ public class UserController extends GenericController {
 
         ArrayList<UserEntity> userEntities = null;
 
-        try{
+        try {
             transaction = session.beginTransaction();
             String hq = "FROM UserEntity U WHERE U.storeEntity=:storeEntity";
 
@@ -220,13 +244,12 @@ public class UserController extends GenericController {
             } else {
                 throw new IllegalStateException("No users found for that store");
             }
-        }catch (HibernateException ex){
+        } catch (HibernateException ex) {
             ex.printStackTrace();
             throw new IllegalStateException(ex.getCause());
-        }finally {
+        } finally {
             session.close();
         }
-
     }
 
 }

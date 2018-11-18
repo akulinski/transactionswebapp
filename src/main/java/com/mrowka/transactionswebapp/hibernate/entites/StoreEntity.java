@@ -16,7 +16,7 @@ import java.util.Set;
 public class StoreEntity {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_store")
     @Expose
     private int id;
@@ -35,7 +35,7 @@ public class StoreEntity {
 
     @Fetch(FetchMode.SELECT)
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "storeEntity")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "storeEntity")
     private Set<UserEntity> userEntitySet;
 
     public StoreEntity(String storeName, String address, boolean active) {
@@ -47,6 +47,7 @@ public class StoreEntity {
     public StoreEntity() {
 
     }
+
 
     public int getId() {
         return id;
@@ -87,4 +88,5 @@ public class StoreEntity {
     public void setUserEntitySet(Set<UserEntity> userEntitySet) {
         this.userEntitySet = userEntitySet;
     }
+
 }
