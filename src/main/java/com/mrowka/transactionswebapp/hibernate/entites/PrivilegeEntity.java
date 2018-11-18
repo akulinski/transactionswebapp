@@ -1,5 +1,7 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
@@ -11,9 +13,11 @@ public class PrivilegeEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "id_privilege")
+    @Expose
     private int id;
 
     @Column(name = "type")
+    @Expose
     private int type;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)

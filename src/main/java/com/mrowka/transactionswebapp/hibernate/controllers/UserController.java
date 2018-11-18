@@ -11,7 +11,9 @@ import org.hibernate.query.Query;
 import org.slf4j.Logger;
 
 import javax.persistence.NoResultException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 
 public class UserController extends GenericController {
 
@@ -191,6 +193,40 @@ public class UserController extends GenericController {
         }finally {
             session.close();
         }
+    }
+
+
+    public ArrayList<UserEntity> getAllUsersInStore(StoreEntity storeEntity) throws IllegalStateException{
+
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        ArrayList<UserEntity> userEntities = null;
+
+        try{
+            transaction = session.beginTransaction();
+            String hq = "FROM UserEntity U WHERE U.storeEntity=:storeEntity";
+
+            Query query = session.createQuery(hq);
+
+            query.setParameter("storeEntity", storeEntity);
+            userEntities = (ArrayList<UserEntity>) query.getResultList();
+
+            transaction.commit();
+
+            if (userEntities != null && userEntities.size() > 0) {
+                return userEntities;
+            } else {
+                throw new IllegalStateException("No users found for that store");
+            }
+        }catch (HibernateException ex){
+            ex.printStackTrace();
+            throw new IllegalStateException(ex.getCause());
+        }finally {
+            session.close();
+        }
+
     }
 
 }

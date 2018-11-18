@@ -1,5 +1,6 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -18,27 +19,33 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_user")
+    @Expose
     private int id;
 
     @Column(name = "login")
+    @Expose
     private String login;
 
     @Column(name = "password")
     private String password;
 
     @Column(name = "email")
+    @Expose
     private String email;
 
     @Column(name = "dateOfJoining")
+    @Expose
     private Date dataOfJoining;
 
 
     @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST)
+    @Expose
     private StoreEntity storeEntity;
 
     @Fetch(FetchMode.SELECT)
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userEntity")
+    @Expose
     private Set<PrivilegeEntity> privilegeEntities;
 
     @Fetch(FetchMode.SELECT)

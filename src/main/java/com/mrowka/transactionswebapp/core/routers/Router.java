@@ -37,5 +37,8 @@ public class Router {
         get(Urls.MY_ACCOUNT.getUrl(),routes::renderManageAccountPage);
         post(Urls.MY_ACCOUNT.getUrl(),routes::processUpdate);
 
+        get(Urls.MANAGE_OTHERS.getUrl(),routes::renderManageOthersPage);
+        post(Urls.USERS_IN_STORE_ENDPOINT.getUrl(),routes::getAllUsersInStore);
+
     }
 }

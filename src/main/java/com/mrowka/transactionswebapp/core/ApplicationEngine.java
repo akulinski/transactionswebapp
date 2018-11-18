@@ -25,6 +25,8 @@ public class ApplicationEngine {
 
     private static Gson gson;
 
+    private static Gson gsonWithExcludions;
+
     /**
      * Provies  same instance of Session factory for all controllers
      *
@@ -69,6 +71,13 @@ public class ApplicationEngine {
     }
 
 
-
+    public static Gson provideGsonWithExcludions(){
+        if(gsonWithExcludions == null){
+            synchronized (ApplicationEngine.class){
+                gsonWithExcludions = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+            }
+        }
+        return gsonWithExcludions;
+    }
 
 }
