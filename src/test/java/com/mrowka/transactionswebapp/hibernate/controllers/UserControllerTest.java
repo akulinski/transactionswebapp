@@ -25,7 +25,7 @@ public class UserControllerTest {
     @Test
     public void addUser() {
 
-        userController.addUser("test","test","test",storeController.getStoreById("store"));
+        userController.addUser("test","test","test",storeController.getStoreByName("store"));
         UserEntity userEntity = userController.getUser("test","test");
         assertNotNull(userEntity);
     }
@@ -38,7 +38,7 @@ public class UserControllerTest {
     @Test
     public void addUserByEntity() {
         UserEntity userEntity = new UserEntity("test2","test2","test2",new Date());
-        userController.addUserByEntity(userEntity,storeController.getStoreById("store"));
+        userController.addUserByEntity(userEntity,storeController.getStoreByName("store"));
 
         UserEntity getFromDb = userController.getUser("test2","test2");
         assertNotNull(getFromDb);
@@ -46,7 +46,7 @@ public class UserControllerTest {
 
     @Test
     public void login() {
-        userController.addUser("mock","mock","mock",storeController.getStoreById("store"));
+        userController.addUser("mock","mock","mock",storeController.getStoreByName("store"));
         boolean login = userController.login("mock","mock");
         assertTrue(login);
     }

@@ -22,14 +22,14 @@
                 <input name="email" placeholder="email" type="text">
                     #if($director)
                         <select name="store" form="login-form" class="ui-autocomplete-category">
-                            <option value="store">STORE_NAME_1</option>
-                            <option value="store">STORE_NAME_2</option>
+                            <option value="test1">STORE_NAME_1</option>
+                            <option value="test2">STORE_NAME_2</option>
                             <option value="store">STORE_NAME_3</option>
                         </select>
 
                         <select name="type" form="login-form" class="ui-autocomplete-category">
-                            <option value="type">kasjer</option>
-                            <option value="store">kierownik</option>
+                            <option value="1">kasjer</option>
+                            <option value="2">kierownik</option>
                         </select>
                     #end
                 <input type="submit">

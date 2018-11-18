@@ -2,7 +2,9 @@ package com.mrowka.transactionswebapp.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.mrowka.transactionswebapp.core.interceptors.LoginInterceptor;
+
 import com.mrowka.transactionswebapp.hibernate.entites.PrivilegeEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
@@ -53,9 +55,8 @@ public class ApplicationEngine {
 
         return logger;
     }
-
-
     public static Gson provideGson() {
+
 
         if (gson == null) {
             synchronized (ApplicationEngine.class) {

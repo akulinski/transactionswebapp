@@ -4,6 +4,11 @@
 
 <hibernate-configuration>
     <session-factory>
+<!--
+        <property name="connection.url">jdbc:postgresql://localhost/webapp</property> &lt;!&ndash; BD Mane &ndash;&gt;
+        <property name="connection.driver_class">org.postgresql.Driver</property> &lt;!&ndash; DB Driver &ndash;&gt;
+        <property name="connection.username">postgres</property> &lt;!&ndash; DB User &ndash;&gt;
+        <property name="connection.password">develop</property> &lt;!&ndash; DB Password &ndash;&gt;-->
 
         <property name="connection.url">jdbc:postgresql://35.242.247.64/webapp</property> <!-- BD Mane -->
         <property name="connection.driver_class">org.postgresql.Driver</property> <!-- DB Driver -->
@@ -13,8 +18,9 @@
         <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property> <!-- DB Dialect -->
         <property name="hbm2ddl.auto">create-drop</property> <!-- create / create-drop / update -->
 
-<!--        <property name="show_sql">true</property> &lt;!&ndash; Show SQL in console &ndash;&gt;
-        <property name="format_sql">true</property> &lt;!&ndash; Show SQL formatted &ndash;&gt;-->
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
         <property name="hibernate.enable_lazy_load_no_trans">true</property>
     </session-factory>
 </hibernate-configuration>
