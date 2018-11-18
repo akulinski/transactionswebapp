@@ -18,7 +18,7 @@ public class LoginInterceptor {
     public LoginInterceptor() {
         userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
 
-        String[] protectedRoutes = new String[]{Urls.TRANSACTIONS.getUrl(), Urls.USERS.getUrl(), Urls.ADD.getUrl(),Urls.REGISTRATION.getUrl(),Urls.MY_ACCOUNT.getUrl()};
+        String[] protectedRoutes = new String[]{Urls.TRANSACTIONS.getUrl(), Urls.USERS.getUrl(), Urls.ADD.getUrl(),Urls.REGISTRATION.getUrl(),Urls.MY_ACCOUNT.getUrl(),Urls.MANAGE_OTHERS.getUrl()};
 
         Filter f = (req, res) -> {
             if (req.session().attribute(ATTRIBUTE) == null) {

@@ -7,6 +7,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.ArrayList;
+
 public class StoreController extends GenericController {
 
     public StoreController(SessionFactory sessionFactory) {
@@ -69,6 +71,40 @@ public class StoreController extends GenericController {
         }
 
         return null;
+    }
+
+    public ArrayList<StoreEntity> getAllStores() throws IllegalStateException{
+
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        ArrayList<StoreEntity> storeEntityArrayList = null;
+
+        try{
+
+            transaction = session.beginTransaction();
+
+            String hq = "FROM StoreEntity S";
+
+            Query query = session.createQuery(hq);
+
+            storeEntityArrayList = (ArrayList<StoreEntity>) query.getResultList();
+
+            if(storeEntityArrayList!=null && storeEntityArrayList.size()>0){
+                return storeEntityArrayList;
+            }else{
+                throw new IllegalStateException("No stores found");
+            }
+        }catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new IllegalStateException(ex.getMessage());
+
+        } finally {
+            session.close();
+        }
     }
 
 }

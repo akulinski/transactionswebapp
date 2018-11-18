@@ -1,5 +1,6 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
+import com.google.gson.annotations.Expose;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
@@ -17,15 +18,19 @@ public class StoreEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id_store")
+    @Expose
     private int id;
 
     @Column(name = "store_name")
+    @Expose
     private String storeName;
 
     @Column(name = "address")
+    @Expose
     private String address;
 
     @Column(name = "active")
+    @Expose
     private boolean active;
 
     @Fetch(FetchMode.SELECT)
