@@ -1,12 +1,15 @@
 package com.mrowka.transactionswebapp.core.methods;
 
+import com.google.gson.Gson;
 import com.mrowka.transactionswebapp.core.ApplicationEngine;
 import com.mrowka.transactionswebapp.core.validators.LoginValidator;
 import com.mrowka.transactionswebapp.hibernate.controllers.ControllerFactory;
 import com.mrowka.transactionswebapp.hibernate.controllers.PrivilegeController;
 import com.mrowka.transactionswebapp.hibernate.controllers.StoreController;
 import com.mrowka.transactionswebapp.hibernate.controllers.UserController;
+import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
+import com.mrowka.transactionswebapp.requestresponsemodel.UsersRequest;
 import com.mrowka.transactionswebapp.util.ControllerTypes;
 import com.mrowka.transactionswebapp.util.Urls;
 import org.slf4j.Logger;
@@ -16,9 +19,7 @@ import spark.Response;
 import spark.template.velocity.VelocityTemplateEngine;
 import spark.utils.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Routes {
 
@@ -208,6 +209,42 @@ public class Routes {
         response.redirect("/");
 
         return null;
+    }
+
+
+    public Object renderManageOthersPage(Request request,Response response){
+        Map<String,Object> model = new HashMap<>();
+        String username = request.session().attribute("username");
+        model.put("director",false);
+
+        model.put("allStores",storeController.getAllStores());
+
+        UserEntity userEntity = userController.getUsetByUsername(username);
+
+        //needs refactoring
+        userEntity.getPrivilegeEntity().forEach(privilegeEntity -> {
+            if (privilegeEntity.getType() == 3){
+                model.put("director",true);
+            }
+        });
+
+
+        return new VelocityTemplateEngine().render(
+                new ModelAndView(model, "accountmanagment/manageothers/manageothers.vm")
+        );
+    }
+
+    public Object getAllUsersInStore(Request request,Response response){
+
+        response.type("application/json");
+
+        UsersRequest usersRequest = ApplicationEngine.provideGson().fromJson(request.body(),UsersRequest.class);
+        System.out.println("--------------STORE------------------------------------------- "+usersRequest.getStore());
+        StoreEntity storeEntity = storeController.getStoreById(usersRequest.getStore());
+
+        ArrayList<UserEntity> users = userController.getAllUsersInStore(storeEntity);
+
+        return ApplicationEngine.provideGsonWithExcludions().toJson(users);
     }
 }
 

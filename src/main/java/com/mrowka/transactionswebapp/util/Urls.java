@@ -8,7 +8,9 @@ public enum Urls {
     ADD("/add"),
     USERS("/users"),
     REGISTRATION("/register"),
-    MY_ACCOUNT("/myaccount");
+    MY_ACCOUNT("/myaccount"),
+    MANAGE_OTHERS("/manageothers"),
+    USERS_IN_STORE_ENDPOINT("/manageothers/getusers");
 
     private String url;
 

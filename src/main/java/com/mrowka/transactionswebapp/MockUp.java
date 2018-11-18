@@ -46,7 +46,7 @@ public class MockUp {
 
         UserEntity userEntity = new UserEntity("username","password","password",new Date());
         userController.addUserByEntity(userEntity,storeController.getStoreById("test1"));
-        privilegeController.addPrivilege(1,userEntity);
+        privilegeController.addPrivilege(3,userEntity);
         transactionController.addTransaction(userEntity,new TransactionEntity(null,true,new Date(),new Date(),0));
     }
 }
