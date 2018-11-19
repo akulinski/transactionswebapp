@@ -1,5 +1,7 @@
 package com.mrowka.transactionswebapp.hibernate.entites;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.Date;
@@ -12,21 +14,27 @@ public class TransactionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_transaction")
+    @Expose
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @Expose
     private UserEntity userEntity;
 
     @Column(name = "is_approved")
+    @Expose
     private boolean isApproved;
 
     @Column(name = "date_of_creation")
+    @Expose
     private Date dateOfCreation;
 
     @Column(name = "date_of_modification")
+    @Expose
     private Date dateOfModification;
 
     @Column(name = "modifier_id", nullable = true)
+    @Expose
     private int modifierId;
 
     //additional fields
