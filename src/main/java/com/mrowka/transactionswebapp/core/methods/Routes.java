@@ -10,6 +10,7 @@ import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
 import com.mrowka.transactionswebapp.requestresponsemodel.UsersRequest;
 import com.mrowka.transactionswebapp.util.ControllerTypes;
+import com.mrowka.transactionswebapp.util.ToJson;
 import com.mrowka.transactionswebapp.util.Urls;
 import org.slf4j.Logger;
 import spark.ModelAndView;
@@ -260,6 +261,7 @@ public class Routes {
         ArrayList<StoreEntity> storeEntities = storeController.getAllStores();
 
         return ApplicationEngine.provideGsonWithExcludions().toJson(storeEntities);
+
     }
 
     public Object getUsers(Request request, Response response) {
@@ -272,6 +274,7 @@ public class Routes {
         ArrayList<UserEntity> userEntities = userController.getUsersByStoreEntity(storeEntity);
 
         return ApplicationEngine.provideGsonWithExcludions().toJson(userEntities);
+
     }
 
 
@@ -298,6 +301,7 @@ public class Routes {
         ArrayList<TransactionEntity> transactionEntities = transactionController.getTransactionsByUserEntityAndDate(userEntity, dateFromD, dateToD);
 
         return ApplicationEngine.provideGsonWithExcludions().toJson(transactionEntities);
+
     }
 
     public Object updateTransactions(Request request, Response response) {

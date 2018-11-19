@@ -33,6 +33,7 @@ function onload(){
 
 
         let url = "http://localhost:8080/getTransactions?"+dateFrom.name+'='+dateFrom.value+'&'+dateTo.name+'='+dateTo.value+'&'+selectId.name+'='+selectId.value+'&'+selectUser.name+'='+selectUser.value
+
         console.log(url);
         fetch(url)
         .then(function(response) {
