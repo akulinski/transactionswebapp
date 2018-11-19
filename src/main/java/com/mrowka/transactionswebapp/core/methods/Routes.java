@@ -10,7 +10,6 @@ import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
 import com.mrowka.transactionswebapp.requestresponsemodel.UsersRequest;
 import com.mrowka.transactionswebapp.util.ControllerTypes;
-import com.mrowka.transactionswebapp.util.ToJson;
 import com.mrowka.transactionswebapp.util.Urls;
 import org.slf4j.Logger;
 import spark.ModelAndView;
