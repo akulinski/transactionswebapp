@@ -6,7 +6,6 @@ function onload(){
     let submitButton = document.querySelector("#submitButton");
 
     let selectId = document.getElementById("selectId");
-    let selectUser = document.getElementById("selectUser");
     fetch('http://localhost:8080/getStores')
     .then(function(response) {
         console.log(response);
@@ -20,23 +19,10 @@ function onload(){
             option.value = element.id;
             selectId.add(option);
         });
+        if(myJson!==null)onStoreSelect();
     });
 
-    selectId.onchange = ()=>{
-        selectUser.innerHTML = "";//Erasing all inside of select
-        fetch('http://localhost:8080/getUsers?shopId='+selectId.value)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(myJson) {
-            myJson.forEach((element)=>{
-                var option = document.createElement("option");
-                option.text = element.login;
-                option.value = element.login;
-                selectUser.add(option);
-            });
-        });
-    };
+    selectId.onchange = onStoreSelect;
 
     submitButton.onclick = ()=>{
         let dateFrom = document.querySelector("#datePickerFrom");
@@ -46,7 +32,7 @@ function onload(){
 
 
 
-        var url = "http://localhost:8080/getTransactions?"+dateFrom.name+'='+dateFrom.value+'&'+dateTo.name+'='+dateTo.value+'&'+selectId.name+'='+selectId.value+'&'+selectUser.name+'='+selectUser.value
+        let url = "http://localhost:8080/getTransactions?"+dateFrom.name+'='+dateFrom.value+'&'+dateTo.name+'='+dateTo.value+'&'+selectId.name+'='+selectId.value+'&'+selectUser.name+'='+selectUser.value
         console.log(url);
         fetch(url)
         .then(function(response) {
@@ -70,7 +56,9 @@ function addToCard(isReadOnly, jsonPart){
     div.classList.add('d-inline-flex');
 
     button.type='button';
-    button.classList.add('form-control');
+    button.classList.add('btn');
+    button.classList.add('btn-dark');
+    button.classList.add('btn-sm');
     button.disabled=true;
     button.value = 'Zapisz';
 
@@ -78,8 +66,9 @@ function addToCard(isReadOnly, jsonPart){
         let parent = button.parentElement;
         let elements = parent.querySelectorAll('input');
         let obj = {};
+        button.disabled=true;
         elements.forEach((element)=>{
-            if(element!=button){
+            if(element!==button){
                 console.log(element.value);
                 obj[element.id]=element.value;
             }
@@ -97,15 +86,25 @@ function addToCard(isReadOnly, jsonPart){
                 else addToCard('', element);
             });
         });
-    }
+    };
+    console.log(jsonPart);
 
     Object.keys(jsonPart).forEach(function(k){
         let element = document.createElement('input');
         let label = document.createElement('label');
         let formGroup = document.createElement('div');
 
-        element.text = jsonPart[k];
-        element.value = jsonPart[k];
+        if(k==='userEntity') {
+            element.text = "userId";
+            element.value = jsonPart.id;
+            element.id = "userId";
+            label.innerHTML = 'userId';
+        }else {
+            element.text = jsonPart[k];
+            element.value = jsonPart[k];
+            element.id = k;
+            label.innerHTML = k;
+        }
         element.disabled = isReadOnly;
         element.id = k;
         element.onchange=()=>button.disabled=false;
@@ -114,7 +113,6 @@ function addToCard(isReadOnly, jsonPart){
         element.classList.add("form-control");
         
         label.for = element.id;
-        label.innerHTML = k;
 
         formGroup.classList.add("mr-2");
         formGroup.classList.add("mb-2");
@@ -125,6 +123,7 @@ function addToCard(isReadOnly, jsonPart){
 
         div.appendChild(formGroup);
     });
+
     div.appendChild(button);
     card.appendChild(div);
     card.appendChild(document.createElement("br"));
@@ -132,4 +131,20 @@ function addToCard(isReadOnly, jsonPart){
 
 function serialize(obj) {
     return '?'+Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+}
+
+function onStoreSelect(){
+    selectUser.innerHTML = "";//Erasing all inside of select
+    fetch('http://localhost:8080/getUsers?shopId='+selectId.value)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(myJson) {
+            myJson.forEach((element)=>{
+                var option = document.createElement("option");
+                option.text = element.login;
+                option.value = element.login;
+                selectUser.add(option);
+            });
+        });
 }
