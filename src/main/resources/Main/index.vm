@@ -23,6 +23,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/add">Dodawanie</a>
+                </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/manageothers">Zarządzaj użytkownikami</a>
                   </li>
               </ul>
               <a href="/login" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-forward"></span> Zaloguj się</a>
