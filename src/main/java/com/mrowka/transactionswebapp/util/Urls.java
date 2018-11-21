@@ -10,6 +10,8 @@ public enum Urls {
     REGISTRATION("/register"),
     MY_ACCOUNT("/myaccount"),
     MANAGE_OTHERS("/manageothers"),
+    MANAGE_OTHERS_USERINFO("/manageothers/getinfo"),
+    MANAGE_OTHERS_UPDATEUSER("/manageothers/updateuser"),
     USERS_IN_STORE_ENDPOINT("/manageothers/getusers"),
     GET_STORES("/getStores"),
     GET_USERS("/getUsers"),
