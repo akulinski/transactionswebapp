@@ -43,7 +43,7 @@ public class Routes {
     public Object mainSite(Request request, Response response) {
         Map<String, Object> model = new HashMap<>();
         return new VelocityTemplateEngine().render(
-                new ModelAndView(model, "index.vm")
+                new ModelAndView(model, "Main/index.vm")
         );
     }
 
@@ -312,6 +312,34 @@ public class Routes {
         transactionController.updateTransaction(transactionId, modifierId, dateOfModification, isApproved);
 
         return Boolean.toString(isApproved) + transactionId + dateOfCreation + dateOfModification + modifierId;
+    }
+
+    public Object manageOthersGetInfo(Request request, Response response){
+        String userName = request.queryParams("userName");
+        UserController userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
+
+        return ApplicationEngine.provideGsonWithExcludions().toJson(userController.getUserByUserName(userName));
+    }
+
+    public Object manageOthersUpdateUser(Request request, Response response){
+        UserController userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
+        StoreController storeController = (StoreController) ControllerFactory.provideController(ControllerTypes.STORE_CONTROLLER.getType());
+
+        int ID = Integer.parseInt(request.queryParams("ID"));
+        String userName = request.queryParams("Username");
+        String password = request.queryParams("password");
+        String passwordRepeat = request.queryParams("passwordRepeat");
+        String email = request.queryParams("email");
+        int store = Integer.parseInt(request.queryParams("store"));
+        int privilege = Integer.parseInt(request.queryParams("privilege"));
+
+        if(password.equals(passwordRepeat)){
+            if(password.equals("")) password = userController.getUserById(ID).getPassword();
+            return userController.updateUser(ID, userName, password, email, storeController.getStoreById(store)) >= 0;
+        }
+
+
+        else return false;
     }
 }
 

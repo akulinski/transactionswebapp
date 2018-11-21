@@ -22,7 +22,7 @@ public class UserEntity {
     @Expose
     private int id;
 
-    @Column(name = "login")
+    @Column(name = "login", unique = true)
     @Expose
     private String login;
 

@@ -1,52 +1,95 @@
 <html>
-<head>
-    <meta charset='utf-8'/>
-    <title>Web tool (temp)</title>
-
-</head>
-
-<body >
-
-
-<div class="container">
-
-    <div class="form-group">
-
-        <form id="manage-form" action="/manageothers" method="post">
-
-            #if($director)
-                <label for="">Select Store</label>
-                <select multiple class="form-control" name="store-selector" id="store-selector">
-
-                    #foreach( $store in $allStores )
-                        <option>$store.getStoreName()</option>
-                    #end
-
-                </select>
-            #end
-            <div id="random">
-
+    <head>
+        <meta charset='utf-8'/>
+        <title>Web tool (temp)</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+              integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+              integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <link rel="stylesheet" href="/style/snackbar.css"
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="/accountmanagment/manageothers/fetchandparse.js"> </script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Web tool (temp)</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Strona główna <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/transactions">Wgląd</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users">Użytkownicy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add">Dodawanie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manageothers">Zarządzaj użytkownikami</a>
+                    </li>
+                </ul>
+                <a href="/login" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-forward"></span> Zaloguj się</a>
             </div>
-            <label for="">Select user</label>
-            <select multiple class="form-control" name="user-selector" id="user-selector" ">
+        </nav>
+        <div class="container">
+            <div class="form-group">
+                <form id="manage-form" action="/manageothers" method="post">
+                    #if($director)
+                        <label for="">Select Store</label>
+                        <select multiple class="form-control" name="store-selector" id="store-selector" onchange="onStoreSelect()">
+                            #foreach( $store in $allStores )
+                                <option value="$store.getId()">$store.getStoreName()</option>
+                            #end
+                        </select>
+                    #end
+                    <label for="">Select user</label>
+                    <select class="form-control" name="user-selector" id="user-selector" onchange="onUserSelect()"></select>
+                </form>
 
-                <option value="user"> </option>
+                <div class="card">
+                    <div class="card-header">Ustawienia użytkownika</div>
+                    <div class="card-body">
+                        <form>
+                            <label for="ID">ID: </label>
+                            <input type="text" class="form-control mb-2" id="ID" name="ID" disabled="disabled" />
+                            <label for="username">Username: </label>
+                            <input type="text" class="form-control mb-2" id="username" default=""/>
 
-            </select>
+                            <div>
+                                <label for="password">Password (if empty it won't be changed): </label>
+                                <input type="password" class="form-control mb-2" id="password"/>
+                                <label for="passwordRepeat">Repeat password</label>
+                                <input type="password" class="form-control mb-2" id="passwordRepeat"/>
+                            </div>
+                            <label for="email">email: </label>
+                            <input type="text" class="form-control mb-2" id="email" name="email" />
 
-        </form>
+                            <label for="store-changer">Store: </label>
+                            <select class="form-control mb-2" name="store-changer" id="store-changer">
+                                #foreach($store in $allStores)
+                                    <option value="$store.getId()">$store.getStoreName()</option>
+                                #end
+                            </select>
+                            <label for="privilege">Privilege: </label>
+                            <select class="form-control mb-2" name="privilege" id="privilege">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
 
-    </div>
-</div>
+                            <button type="button" class="btn btn-primary" id="saveButton" onclick="saveChanges()">Zapisz</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-      integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script src="/accountmanagment/manageothers/fetchandparse.js"> </script>
-
-</body>
+        <div id="snackbar">Some text some message..</div>
+    </body>
 </html>

@@ -40,6 +40,8 @@ public class Router {
 
         get(Urls.MANAGE_OTHERS.getUrl(), routes::renderManageOthersPage);
         post(Urls.USERS_IN_STORE_ENDPOINT.getUrl(), routes::getAllUsersInStore);
+        get(Urls.MANAGE_OTHERS_USERINFO.getUrl(), routes::manageOthersGetInfo);
+        get(Urls.MANAGE_OTHERS_UPDATEUSER.getUrl(), routes::manageOthersUpdateUser);
 
     }
 

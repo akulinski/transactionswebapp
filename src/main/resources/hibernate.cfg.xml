@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
 <!--
-        <property name="connection.url">jdbc:postgresql://35.242.247.64/webapp</property> &lt;!&ndash; BD Mane &ndash;&gt;
+        <property name="connection.url">jdbc:postgresql://localhost/webapp</property> &lt;!&ndash; BD Mane &ndash;&gt;
         <property name="connection.driver_class">org.postgresql.Driver</property> &lt;!&ndash; DB Driver &ndash;&gt;
         <property name="connection.username">postgres</property> &lt;!&ndash; DB User &ndash;&gt;
         <property name="connection.password">develop</property> &lt;!&ndash; DB Password &ndash;&gt;-->

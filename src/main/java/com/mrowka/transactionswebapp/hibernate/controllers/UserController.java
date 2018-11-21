@@ -1,6 +1,7 @@
 package com.mrowka.transactionswebapp.hibernate.controllers;
 
 import com.mrowka.transactionswebapp.core.ApplicationEngine;
+import com.mrowka.transactionswebapp.hibernate.entites.PrivilegeEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
 import org.hibernate.HibernateException;
@@ -198,6 +199,38 @@ public class UserController extends GenericController {
         } finally {
             session.close();
         }
+    }
+
+    public UserEntity getUserById(int id) {
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        UserEntity userEntity = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hq = "FROM UserEntity U WHERE U.id=:id";
+            Query query = session.createQuery(hq);
+
+            query.setParameter("id", id);
+
+            userEntity = (UserEntity) query.getSingleResult();
+
+            transaction.commit();
+            if (userEntity != null) {
+                return userEntity;
+            } else {
+                throw new IllegalStateException("No user found");
+            }
+
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            throw new IllegalStateException(ex.getMessage());
+        } finally {
+            session.close();
+        }
 
     }
 
@@ -250,6 +283,36 @@ public class UserController extends GenericController {
         } finally {
             session.close();
         }
+    }
+
+    public int updateUser(int ID, String userName, String password, String email, StoreEntity store){
+        Session session = factory.openSession();
+
+        Transaction transaction = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            String hq = "UPDATE ";
+            Query query = session.createQuery("UPDATE UserEntity U SET U.login =: login, U.email =: email, U.password =: password, U.storeEntity =: storeEntity  WHERE U.id =: id");
+            query.setParameter("login", userName);
+            query.setParameter("id", ID);
+            query.setParameter("email", email);
+            query.setParameter("password", password);
+            query.setParameter("storeEntity", store);
+            int result = query.executeUpdate();
+
+            transaction.commit();
+            return result;
+        } catch (HibernateException ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            ex.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return -1;
     }
 
 }
