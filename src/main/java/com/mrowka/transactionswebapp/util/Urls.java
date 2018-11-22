@@ -12,6 +12,7 @@ public enum Urls {
     MANAGE_OTHERS("/manageothers"),
     MANAGE_OTHERS_USERINFO("/manageothers/getinfo"),
     MANAGE_OTHERS_UPDATEUSER("/manageothers/updateuser"),
+    MANAGE_OTHERS_ADDUSER("/manageothers/adduser"),
     USERS_IN_STORE_ENDPOINT("/manageothers/getusers"),
     GET_STORES("/getStores"),
     GET_USERS("/getUsers"),

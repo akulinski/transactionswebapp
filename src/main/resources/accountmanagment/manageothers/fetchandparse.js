@@ -65,10 +65,28 @@ function saveChanges(){
             return response.json();
         })
         .then(function(myJson) {
-            if(myJson===true){
-                createSnackBar("Udało się zapisać dane!");
-            }
-            else createSnackBar("Nie udało się zapisać danych");
+            console.log(myJson);
+            createSnackBar(myJson.Message);
+        });
+}
+
+function addNewUser(){
+    let obj = {};
+    obj['Username'] = document.querySelector("#newUsername").value;
+    obj['password'] = document.querySelector("#newPassword").value;
+    obj['passwordRepeat'] = document.querySelector("#newPasswordRepeat").value;
+    obj['email'] = document.querySelector("#newEmail").value;
+    obj['store'] = document.querySelector("#newStore-changer").value;
+    obj['privilege'] = document.querySelector("#newPrivilege").value;
+    let url = "http://localhost:8080/manageothers/adduser"+serialize(obj);
+    console.log(url);
+    fetch(url)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(myJson) {
+            console.log(myJson);
+            createSnackBar(myJson.Message);
         });
 }
 
@@ -80,5 +98,24 @@ function createSnackBar(str){
 }
 function serialize(obj) {
     return '?'+Object.keys(obj).reduce(function(a,k){a.push(k+'='+encodeURIComponent(obj[k]));return a},[]).join('&')
+}
+
+function openView(evt, tabName) {
+    let i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
 }
 

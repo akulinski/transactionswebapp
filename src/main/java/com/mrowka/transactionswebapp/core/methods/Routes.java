@@ -225,6 +225,7 @@ public class Routes {
         model.put("allStores", storeController.getAllStores());
 
         UserEntity userEntity = userController.getUserByUserName(username);
+        model.put("currUser", userEntity);
 
         //needs refactoring
         userEntity.getPrivilegeEntity().forEach(privilegeEntity -> {
@@ -335,11 +336,32 @@ public class Routes {
 
         if(password.equals(passwordRepeat)){
             if(password.equals("")) password = userController.getUserById(ID).getPassword();
-            return userController.updateUser(ID, userName, password, email, storeController.getStoreById(store)) >= 0;
+
+            if(userController.updateUser(ID, userName, password, email, storeController.getStoreById(store)) >= 0)return "{\"Message\": \"Konto zostało zapisane!\"}";
+            else return "{\"Message\": \"Konto nie zostało zapisane!\"}";
         }
+        else return "{\"Message\": \"Hasła podane w polach się nie zgadzają\"}";
+    }
 
+    public Object manageOthersAddUser(Request request, Response response){
+        String userName = request.queryParams("Username");
+        String password = request.queryParams("password");
+        String passwordRepeat = request.queryParams("passwordRepeat");
+        String email = request.queryParams("email");
+        int storeId = Integer.parseInt(request.queryParams("store"));
+        int privilege = Integer.parseInt(request.queryParams("privilege"));
 
-        else return false;
+        UserController userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
+        PrivilegeController privilegeController = (PrivilegeController) ControllerFactory.provideController(ControllerTypes.PRIVILEGE_CONTROLLER.getType());
+
+        if(!password.equals(passwordRepeat))return "{\"Message\": \"Hasła się nie zgadzają\"}";
+        else if(password.equals(""))return "{\"Message\": \"Pole hasła jest puste\"}";
+        else if(userController.checkIfUserExists(userName)!=null)return "{\"Message\": \"Już istnieje użytkownik o takiej nazwie\"}";
+
+        UserEntity userEntity = new UserEntity(userName, password, email, new Date());
+        if(userController.addUserByEntity(userEntity, storeController.getStoreById(storeId))==null)return "{\"Message\": \"Nie udało się założyć konta\"}";
+        privilegeController.addPrivilege(privilege, userEntity);
+        return "{\"Message\": \"Udało się utworzyć użytkownika\"}";
     }
 }
 

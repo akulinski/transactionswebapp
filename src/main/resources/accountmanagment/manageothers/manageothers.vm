@@ -6,8 +6,8 @@
               integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
               integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-        <link rel="stylesheet" href="/style/snackbar.css"
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="/style/snackbar.css">
+        <link rel="stylesheet" href="/style/tabs.css">
         <script src="/accountmanagment/manageothers/fetchandparse.js"> </script>
     </head>
     <body>
@@ -37,29 +37,107 @@
                 <a href="/login" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-forward"></span> Zaloguj się</a>
             </div>
         </nav>
-        <div class="container">
-            <div class="form-group">
-                <form id="manage-form" action="/manageothers" method="post">
-                    #if($director)
+        #if($director)
+            <div class="tab">
+                <button class="tablinks" onclick="openView(event, 'ManageUsers')">Manage users</button>
+                <button class="tablinks" onclick="openView(event, 'AddUsers')">Add new user</button>
+            </div>
+            <div class="container tabcontent" style="display: block;" id="ManageUsers">
+                <div class="form-group">
+                    <form id="manage-form" action="/manageothers" method="post">
                         <label for="">Select Store</label>
                         <select multiple class="form-control" name="store-selector" id="store-selector" onchange="onStoreSelect()">
-                            #foreach( $store in $allStores )
+                            #foreach($store in $allStores)
                                 <option value="$store.getId()">$store.getStoreName()</option>
                             #end
                         </select>
-                    #end
-                    <label for="">Select user</label>
-                    <select class="form-control" name="user-selector" id="user-selector" onchange="onUserSelect()"></select>
-                </form>
+                        <label for="">Select user</label>
+                        <select class="form-control" name="user-selector" id="user-selector" onchange="onUserSelect()"></select>
+                    </form>
+                    <div class="card">
+                        <div class="card-header">Ustawienia użytkownika</div>
+                        <div class="card-body">
+                            <form>
+                                <label for="ID">ID: </label>
+                                <input type="text" class="form-control mb-2" id="ID" name="ID" disabled="disabled" />
+                                <label for="username">Username: </label>
+                                <input type="text" class="form-control mb-2" id="username" default=""/>
 
+                                <div>
+                                    <label for="password">Password (if empty it won't be changed): </label>
+                                    <input type="password" class="form-control mb-2" id="password"/>
+                                    <label for="passwordRepeat">Repeat password</label>
+                                    <input type="password" class="form-control mb-2" id="passwordRepeat"/>
+                                </div>
+                                <label for="email">email: </label>
+                                <input type="text" class="form-control mb-2" id="email" name="email" />
+
+                                <label for="store-changer">Store: </label>
+                                <select class="form-control mb-2" name="store-changer" id="store-changer">
+                                    #foreach($store in $allStores)
+                                        <option value="$store.getId()">$store.getStoreName()</option>
+                                    #end
+                                </select>
+                                <label for="privilege">Privilege: </label>
+                                <select class="form-control mb-2" name="privilege" id="privilege">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+
+                                <button type="button" class="btn btn-primary" id="saveButton" onclick="saveChanges()">Zapisz</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="AddUsers" class="tabcontent">
+
+                <div class="container form-group">
+                    <div class="card">
+                        <div class="card-header">Ustawienia nowego użytkownika</div>
+                        <div class="card-body">
+                            <form>
+                                <label for="newUsername">Username: </label>
+                                <input type="text" class="form-control mb-2" id="newUsername" default=""/>
+                                <div>
+                                    <label for="newPassword">Password: </label>
+                                    <input type="password" class="form-control mb-2" id="newPassword"/>
+                                    <label for="newPasswordRepeat">Repeat password</label>
+                                    <input type="password" class="form-control mb-2" id="newPasswordRepeat"/>
+                                </div>
+                                <label for="newEmail">email: </label>
+                                <input type="text" class="form-control mb-2" id="newEmail" name="newEmail" />
+
+                                <label for="newStore-changer">Store: </label>
+                                <select class="form-control mb-2" name="newStore-changer" id="newStore-changer">
+                                    #foreach($store in $allStores)
+                                        <option value="$store.getId()">$store.getStoreName()</option>
+                                    #end
+                                </select>
+                                <label for="newPrivilege">Privilege: </label>
+                                <select class="form-control mb-2" name="newPrivilege" id="newPrivilege">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+
+                                <button type="button" class="btn btn-primary" id="saveButton" onclick="addNewUser()">Utwórz nowego użytkownika</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        #else
+            <div class="container form-group">
                 <div class="card">
                     <div class="card-header">Ustawienia użytkownika</div>
                     <div class="card-body">
                         <form>
                             <label for="ID">ID: </label>
-                            <input type="text" class="form-control mb-2" id="ID" name="ID" disabled="disabled" />
+                            <input type="text" class="form-control mb-2" id="ID" name="ID" disabled="disabled" value="$currUser.getId()"/>
                             <label for="username">Username: </label>
-                            <input type="text" class="form-control mb-2" id="username" default=""/>
+                            <input type="text" class="form-control mb-2" id="username" default="" value="$currUser.getLogin()"/>
 
                             <div>
                                 <label for="password">Password (if empty it won't be changed): </label>
@@ -68,16 +146,16 @@
                                 <input type="password" class="form-control mb-2" id="passwordRepeat"/>
                             </div>
                             <label for="email">email: </label>
-                            <input type="text" class="form-control mb-2" id="email" name="email" />
+                            <input type="text" class="form-control mb-2" id="email" name="email" value="$currUser.getEmail()" />
 
                             <label for="store-changer">Store: </label>
-                            <select class="form-control mb-2" name="store-changer" id="store-changer">
+                            <select class="form-control mb-2" name="store-changer" id="store-changer" value="$currUser.getStoreEntity().getId()" disabled="disabled">
                                 #foreach($store in $allStores)
                                     <option value="$store.getId()">$store.getStoreName()</option>
                                 #end
                             </select>
                             <label for="privilege">Privilege: </label>
-                            <select class="form-control mb-2" name="privilege" id="privilege">
+                            <select class="form-control mb-2" name="privilege" id="privilege" value="$currUser.getPrivilegeEntity().getId()" disabled="disabled">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -88,8 +166,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        #end
         <div id="snackbar">Some text some message..</div>
     </body>
 </html>
