@@ -31,12 +31,14 @@ public class Routes {
     private UserController userController;
     private StoreController storeController;
     private PrivilegeController privilegeController;
+    private TransactionController transactionController;
     private Logger logger;
 
     public Routes() {
         userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
         storeController = (StoreController) ControllerFactory.provideController(ControllerTypes.STORE_CONTROLLER.getType());
         privilegeController = (PrivilegeController) ControllerFactory.provideController(ControllerTypes.PRIVILEGE_CONTROLLER.getType());
+        transactionController = (TransactionController) ControllerFactory.provideController(ControllerTypes.TRANSACTION_CONTROLLER.getType());
         logger = ApplicationEngine.provideLogger();
     }
 
@@ -49,8 +51,20 @@ public class Routes {
 
     public Object showTransactions(Request request, Response response) {
         Map<String, Object> model = new HashMap<>();
+        String username = request.session().attribute("username");
+
+        UserEntity userEntity = userController.getUserByUserName(username);
+
+        model.put("entity", userEntity);
+        model.put("director", false);
+
+        userEntity.getPrivilegeEntity().forEach(privilegeEntity -> {
+            if (privilegeEntity.getType() == 3) {
+                model.put("director", true);
+            }
+        });
         return new VelocityTemplateEngine().render(
-                new ModelAndView(model, "transactionsSite.vm")
+                new ModelAndView(model, "Transactions/transactionsSite.vm")
         );
     }
 
@@ -301,8 +315,23 @@ public class Routes {
         return ApplicationEngine.provideGsonWithExcludions().toJson(transactionEntities);
     }
 
+    public Object addTransaction(Request request, Response response){
+        String userName = request.queryParams("username");
+
+        UserEntity userEntity = userController.getUserByUserName(userName);
+
+        boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
+
+        TransactionEntity transactionEntity = new TransactionEntity(userEntity, isApproved, new Date(), new Date(), 0);
+
+        Integer transactionId = transactionController.addTransaction(userEntity, transactionEntity);
+        if(transactionId!=null)return "{\"Message\": \"Transakcja Zapisana\"}";
+
+        return "{\"Message\": \"Transakcja nie została zapisana\"}";
+    }
+
     public Object updateTransactions(Request request, Response response) {
-        boolean isApproved = Boolean.getBoolean(request.queryParams("isApproved"));
+        boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
         int transactionId = Integer.parseInt(request.queryParams("id"));
         String dateOfCreation = request.queryParams("dateOfCreation");
         String dateOfModification = request.queryParams("dateOfModification");

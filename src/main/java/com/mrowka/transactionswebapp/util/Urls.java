@@ -17,6 +17,7 @@ public enum Urls {
     GET_STORES("/getStores"),
     GET_USERS("/getUsers"),
     GET_TRANSACTIONS("/getTransactions"),
+    ADD_TRANSACTIONS("/transactions/addTransaction"),
     UPDATE_TRANSACTIONS("/updateTransactions");
 
     private String url;
