@@ -25,8 +25,10 @@ public class Router {
         get(Urls.TRANSACTIONS.getUrl(), routes::showTransactions);
         get(Urls.GET_STORES.getUrl(), routes::getShops);
         get(Urls.GET_USERS.getUrl(), routes::getUsers);
+
         get(Urls.GET_TRANSACTIONS.getUrl(), routes::getTransactions);
         get(Urls.UPDATE_TRANSACTIONS.getUrl(), routes::updateTransactions);
+        get(Urls.ADD_TRANSACTIONS.getUrl(), routes::addTransaction);
 
         get(Urls.LOGIN.getUrl(), routes::showLoginPage);
 

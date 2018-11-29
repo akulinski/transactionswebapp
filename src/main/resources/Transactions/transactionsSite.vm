@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <meta charset='utf-8'/>
+        <title>Web tool (temp)</title>
+        <link rel='stylesheet' href='/bootstrap/bootstrap.css'>
+        <link rel="stylesheet" href="/style/snackbar.css">
+        <link rel="stylesheet" href="/style/tabs.css">
+        <script src="/scripts/util.js"> </script>
+        <script src="/scripts/snackbar.js"> </script>
+        <script src="/scripts/tabs.js"> </script>
+        <script src="/scripts/view.js"> </script>
+        <script src="/scripts/addOrRemoveFields.js"> </script>
+    </head>
+    <body onload="onload();">
+        #set($user=$entity)
+        #parse('template/nav.vm')
+            <div class="tab">
+                <button class="tablinks" onclick="openView(event, 'showTransactions')">Show transactions</button>
+                <button class="tablinks" onclick="openView(event, 'addTransactions')">Add new transactions</button>
+            </div>
+            <div id="showTransactions" style="display: block;" class="tabcontent">
+              <div class="card" id="showTransactions" style="display: block;">
+                  <div class="card-header">Wgląd</div>
+                  <div class="card-body">
+                    <form>
+                        <div class="form-row align-items-center">
+                          <div class="col-sm-3 my-1">
+                              <div class="input-group">
+                                  <input type="date" class="form-control" id="datePickerFrom" name="datePickerFrom">
+                                  <div class="input-group-append">
+                                      <div class="input-group-text"><span class="fa fa-calendar"></span></div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-sm-3 my-1">
+                              <div class="input-group">
+                                  <input type="date" class="form-control" id="datePickerTo" name="datePickerTo">
+                                  <div class="input-group-append">
+                                      <div class="input-group-text"><span class="fa fa-calendar"></span></div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-auto my-1">
+                              <select class="form-control" id="selectId" name="selectId"></select>
+                          </div>
+                          <div class="col-auto my-1">
+                              <select class="form-control" id="selectUser" name="selectUser"></select>
+                          </div>
+                          <div class="col-auto my-1">
+                            <button type="button" class="btn btn-primary" id="submitButton">Przeglądaj</button>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">Rozpiska</div>
+                <div class="card-body" id="cardInfo">
+
+                </div>
+              </div>
+            </div>
+
+            <div class="tabcontent" id="addTransactions">
+                <div class="mb-3 ml-1 d-flex col-sm-2">
+                    <input type="button" onclick="addManyFields()" class="btn btn-primary" value="Dodaj"/>
+                    <input type="number" id="numberOfFields" class="form-control ml-2"/>
+                </div>
+                <form id="Form" class="form-inline align-items-center">
+                    <!---There will be inputs from scripts--->
+                    <div class="col-auto d-block transaction">
+                        <div class="form-group d-inline-block mb-2 mr-2">
+                            <label for="selectFirst">Rozliczone</label>
+                            <select id="selectFirst" class="form-control">
+                                <option value="true">Tak</option>
+                                <option value="false">Nie</option>
+                            </select>
+                        </div><div class="form-group d-inline-block mb-2 mr-2">
+                            <label for="cost">Cena</label>
+                            <input type="text" class="form-control" />
+                        </div><div class="form-group d-inline-block mb-2 mr-2">
+                            <label for="cost">Cena</label>
+                            <input type="text" class="form-control" />
+                        </div><div class="form-group d-inline-block mb-2 mr-2">
+                            <label for="cost">Cena</label>
+                            <input type="text" class="form-control" />
+                        </div><div class="form-group d-inline-block mb-2 mr-2" id="last">
+                            <label for="cost">Cena</label>
+                            <input type="text" class="form-control" />
+                        </div>
+                    </div>
+                </form>
+                <input type="button" class="btn btn-primary" value="Zapisz" id="saveTransaction" onclick="saveTransactions('${entity.getLogin()}')"/>
+            </div>
+            <div id="snackbar">Some text some message..</div>
+        </section>
+        <footer>
+        </footer>
+    </body>
+</html>
