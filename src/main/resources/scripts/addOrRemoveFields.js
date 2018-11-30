@@ -1,6 +1,6 @@
 
 window.addEventListener("load", ()=>{
-    document.querySelector("#last").addEventListener('keypress', (e) => {
+    document.querySelector("#last").addEventListener('keydown', (e) => {
         keyPressed(e);
     });
 });
@@ -12,7 +12,6 @@ function saveTransactions(userName){
         createSnackBar("Nie wprowadzono żadnej wartości w polu");
         return;
     }
-    console.log(allGroups);
     allGroups.forEach((element)=>{
         let arr = getAllValues(element);
         if(!arr)return false;
@@ -76,8 +75,7 @@ function keyPressed(e){
 function addFields(){
     let container = document.getElementById("Form");
     let div = createDiv();
-    createInputs(4, div, container);
-    //button
+    createInputs(4, div);
     div.appendChild(createButton(div));
     div.appendChild(document.createElement("br"));
     container.appendChild(div);
@@ -87,7 +85,7 @@ function createDiv(){
     return addClassesToElement(document.createElement("div"), "col-auto d-block transaction");
 }
 
-function createInputs(numberOfRows, div, container){
+function createInputs(numberOfRows, div){
     let selectBox = document.createElement("select");
     selectBox.innerHTML = "<option value='true'>Tak</option><option value='false'>Nie</option>";
     addClassesToElement(selectBox, "form-control mb-2 mr-2");
@@ -99,9 +97,8 @@ function createInputs(numberOfRows, div, container){
         input.name = "member" + i;
         addClassesToElement(input, "form-control mb-2 mr-2");
         div.appendChild(input);
-        container.appendChild(div);
     }
-    input.addEventListener('keypress', (e) => {
+    input.addEventListener('keydown', (e) => {
         keyPressed(e);
     });
 }
