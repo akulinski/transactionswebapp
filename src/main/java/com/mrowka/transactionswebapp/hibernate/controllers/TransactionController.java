@@ -141,8 +141,10 @@ public class TransactionController extends GenericController {
             transaction = session.beginTransaction();
 
             String hq = "UPDATE ";
-            Query query = session.createQuery("UPDATE TransactionEntity T SET T.modifierId =: modifierId WHERE T.id =: id");
+            Query query = session.createQuery("UPDATE TransactionEntity T SET T.modifierId =: modifierId, T.isApproved =: isApproved, T.dateOfModification =: dateOfModification WHERE T.id =: id");
             query.setParameter("modifierId", modifierId);
+            query.setParameter("isApproved", isApproved);
+            query.setParameter("dateOfModification", new Date());
             query.setParameter("id", id);
             int result = query.executeUpdate();
 

@@ -11,7 +11,8 @@
         <script src="/scripts/tabs.js"> </script>
     </head>
     <body>
-        #include("template/nav.vm")
+        #set($user=$entity)
+        #parse('template/nav.vm')
         #if($director)
             <div class="tab">
                 <button class="tablinks" onclick="openView(event, 'ManageUsers')">Manage users</button>

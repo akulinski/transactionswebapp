@@ -68,28 +68,6 @@
                     <input type="number" id="numberOfFields" class="form-control ml-2"/>
                 </div>
                 <form id="Form" class="form-inline align-items-center">
-                    <!---There will be inputs from scripts--->
-                    <div class="col-auto d-block transaction">
-                        <div class="form-group d-inline-block mb-2 mr-2">
-                            <label for="selectFirst">Rozliczone</label>
-                            <select id="selectFirst" class="form-control">
-                                <option value="true">Tak</option>
-                                <option value="false">Nie</option>
-                            </select>
-                        </div><div class="form-group d-inline-block mb-2 mr-2">
-                            <label for="cost">Cena</label>
-                            <input type="text" class="form-control" />
-                        </div><div class="form-group d-inline-block mb-2 mr-2">
-                            <label for="cost">Cena</label>
-                            <input type="text" class="form-control" />
-                        </div><div class="form-group d-inline-block mb-2 mr-2">
-                            <label for="cost">Cena</label>
-                            <input type="text" class="form-control" />
-                        </div><div class="form-group d-inline-block mb-2 mr-2" id="last">
-                            <label for="cost">Cena</label>
-                            <input type="text" class="form-control" />
-                        </div>
-                    </div>
                 </form>
                 <input type="button" class="btn btn-primary" value="Zapisz" id="saveTransaction" onclick="saveTransactions('${entity.getLogin()}')"/>
             </div>

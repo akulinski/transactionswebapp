@@ -1,8 +1,7 @@
 
 window.addEventListener("load", ()=>{
-    document.querySelector("#last").addEventListener('keydown', (e) => {
-        keyPressed(e);
-    });
+    document.querySelector("#Form").innerHTML="";
+    addFields();
 });
 
 function saveTransactions(userName){
@@ -75,8 +74,15 @@ function keyPressed(e){
 function addFields(){
     let container = document.getElementById("Form");
     let div = createDiv();
-    createInputs(4, div);
-    div.appendChild(createButton(div));
+    if(container.firstChild){
+        console.log(container);
+        createInputs(div);
+        div.appendChild(createButton(div));
+    }
+    else {
+        console.log(container);
+        createInputsWithLabels(div);
+    }
     div.appendChild(document.createElement("br"));
     container.appendChild(div);
 }
@@ -85,28 +91,31 @@ function createDiv(){
     return addClassesToElement(document.createElement("div"), "col-auto d-block transaction");
 }
 
-function createInputs(numberOfRows, div){
-    let selectBox = document.createElement("select");
-    selectBox.innerHTML = "<option value='true'>Tak</option><option value='false'>Nie</option>";
-    addClassesToElement(selectBox, "form-control mb-2 mr-2");
-    div.appendChild(selectBox);
-    let input;
-    for (let i=0;i<numberOfRows;i++){
-        input = document.createElement("input");
-        input.type = "text";
-        input.name = "member" + i;
-        addClassesToElement(input, "form-control mb-2 mr-2");
-        div.appendChild(input);
-    }
-    input.addEventListener('keydown', (e) => {
+function createInputsWithLabels(div) {
+    let selectBox = createSelectWithLabel("selectFirst", "true false", "Tak Nie", div, "Rozliczony");
+    let input1 = createInputWithLabel("cost", "", div, false, "koszt");
+    let input2 = createInputWithLabel("cost", "", div, false, "koszt");
+    let input3 = createInputWithLabel("cost", "", div, false, "koszt");
+    let input4 = createInputWithLabel("cost", "", div, false, "koszt");
+    input4.addEventListener('keydown', (e) => {
+        keyPressed(e);
+    });
+}
+
+function createInputs(div){
+    let selectBox = createSelect("selectFirst", "true false", "Tak Nie", div);
+    let input1 = createInput("cost", "", div, false);
+    let input2 = createInput("cost", "", div, false);
+    let input3 = createInput("cost", "", div, false);
+    let input4 = createInput("cost", "", div, false);
+    input4.addEventListener('keydown', (e) => {
         keyPressed(e);
     });
 }
 
 function createButton(obj){
     let button = document.createElement("button");
-    button.classList.add("btn");
-    button.classList.add("btn-danger");
+    addClassesToElement(button, "btn btn-danger");
     button.innerHTML = "X";
     button.onclick = ()=>{
         removeFields(obj);
