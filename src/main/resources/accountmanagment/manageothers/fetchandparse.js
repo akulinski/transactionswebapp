@@ -34,7 +34,7 @@ function onStoreSelect(){
     let selectShop = document.getElementById("store-selector");
     let selectUser = document.getElementById("user-selector");
     selectUser.innerHTML=""; //Erasing all inside of select
-    fetch('http://localhost:8080/getUsers?shopId='+selectShop.value)
+    fetch('http://localhost:8080/users/getUsers?shopId='+selectShop.value)
         .then(function(response) {
             return response.json();
         })

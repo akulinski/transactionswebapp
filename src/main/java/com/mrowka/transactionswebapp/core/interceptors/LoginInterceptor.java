@@ -4,7 +4,10 @@ import com.mrowka.transactionswebapp.hibernate.controllers.ControllerFactory;
 import com.mrowka.transactionswebapp.hibernate.controllers.UserController;
 import com.mrowka.transactionswebapp.util.ControllerTypes;
 import com.mrowka.transactionswebapp.util.Urls;
+import com.mrowka.transactionswebapp.util.UrlsProtected;
 import spark.Filter;
+
+import java.util.ArrayList;
 
 import static spark.Spark.before;
 
@@ -18,7 +21,11 @@ public class LoginInterceptor {
     public LoginInterceptor() {
         userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
 
-        String[] protectedRoutes = new String[]{Urls.TRANSACTIONS.getUrl(), Urls.USERS.getUrl(), Urls.ADD.getUrl(),Urls.REGISTRATION.getUrl(),Urls.MY_ACCOUNT.getUrl(),Urls.MANAGE_OTHERS.getUrl()};
+        UrlsProtected[] urls = UrlsProtected.values();
+        ArrayList<String> protectedRoutes = new ArrayList<String>();
+        for(UrlsProtected url : urls){
+            protectedRoutes.add(url.getUrl());
+        }
 
         Filter f = (req, res) -> {
             if (req.session().attribute(ATTRIBUTE) == null) {

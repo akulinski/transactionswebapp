@@ -5,7 +5,8 @@
         <link rel='stylesheet' href='/bootstrap/bootstrap.css'>
     </head>
     <body onload="onLoad();">
-        #include("template/nav.vm")
+        #set($user=$entity)
+        #parse('template/nav.vm')
         <section>
 
         </section>

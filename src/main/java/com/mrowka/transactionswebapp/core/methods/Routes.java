@@ -1,7 +1,5 @@
 package com.mrowka.transactionswebapp.core.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mrowka.transactionswebapp.core.ApplicationEngine;
 import com.mrowka.transactionswebapp.core.validators.LoginValidator;
 import com.mrowka.transactionswebapp.hibernate.controllers.*;
@@ -10,6 +8,7 @@ import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
 import com.mrowka.transactionswebapp.requestresponsemodel.UsersRequest;
 import com.mrowka.transactionswebapp.util.ControllerTypes;
+import com.mrowka.transactionswebapp.util.ModelHelper;
 import com.mrowka.transactionswebapp.util.Urls;
 import org.slf4j.Logger;
 import spark.ModelAndView;
@@ -33,6 +32,7 @@ public class Routes {
     private PrivilegeController privilegeController;
     private TransactionController transactionController;
     private Logger logger;
+    private  ModelHelper modelHelper;
 
     public Routes() {
         userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
@@ -40,10 +40,14 @@ public class Routes {
         privilegeController = (PrivilegeController) ControllerFactory.provideController(ControllerTypes.PRIVILEGE_CONTROLLER.getType());
         transactionController = (TransactionController) ControllerFactory.provideController(ControllerTypes.TRANSACTION_CONTROLLER.getType());
         logger = ApplicationEngine.provideLogger();
+        modelHelper = new ModelHelper();
     }
 
     public Object mainSite(Request request, Response response) {
         Map<String, Object> model = new HashMap<>();
+
+        modelHelper.putUser(request, model);
+
         return new VelocityTemplateEngine().render(
                 new ModelAndView(model, "Main/index.vm")
         );
@@ -51,18 +55,9 @@ public class Routes {
 
     public Object showTransactions(Request request, Response response) {
         Map<String, Object> model = new HashMap<>();
-        String username = request.session().attribute("username");
 
-        UserEntity userEntity = userController.getUserByUserName(username);
+        modelHelper.putUser(request, model);
 
-        model.put("entity", userEntity);
-        model.put("director", false);
-
-        userEntity.getPrivilegeEntity().forEach(privilegeEntity -> {
-            if (privilegeEntity.getType() == 3) {
-                model.put("director", true);
-            }
-        });
         return new VelocityTemplateEngine().render(
                 new ModelAndView(model, "Transactions/transactionsSite.vm")
         );
@@ -108,146 +103,10 @@ public class Routes {
         return null;
     }
 
-    /**
-     * Renders registration page if user has privilege of 3 (director) than he is able to chose store
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    public Object renderRegistrationPage(Request request, Response response) {
-
-        Map<String, Object> model = new HashMap<>();
-
-
-        String username = request.session().attribute("username");
-
-        UserEntity userEntity = userController.getUserByUserName(username);
-
-        model.put("entity", userEntity);
-        model.put("director", false);
-
-        userEntity.getPrivilegeEntity().forEach(privilegeEntity -> {
-            if (privilegeEntity.getType() == 3) {
-                model.put("director", true);
-            }
-        });
-
-        return new VelocityTemplateEngine().render(
-                new ModelAndView(model, "registration/registerPage.vm")
-        );
-    }
-
-    public Object processRegistrationPage(Request request, Response response) {
-
-        Map<String, Object> model = new HashMap<>();
-
-        String username = request.queryParams("username");
-        String password = request.queryParams("password");
-        String email = request.queryParams("email");
-
-        String store = request.queryParams("store");
-
-        String type = request.queryParams("type");
-
-        //checking if no store was selected if so registration comes form manager not director and store is managers store
-        String registratorName = request.session().attribute("username");
-
-        if (store == null) {
-            UserEntity registrator = userController.getUserByUserName(registratorName);
-            store = registrator.getStoreEntity().getStoreName();
-        }
-
-        if (type == null) {
-            type = "1";
-        }
-        UserEntity userEntity = new UserEntity(username, password, email, new Date());
-
-        userController.addUserByEntity(userEntity, storeController.getStoreByName(store));
-
-        privilegeController.addPrivilege(Integer.parseInt(type), userEntity);
-
-        model.put("createdUser", userEntity);
-
-        return new VelocityTemplateEngine().render(
-                new ModelAndView(model, "registration/registerPage.vm")
-        );
-    }
-
-    public Object renderManageAccountPage(Request request, Response response) {
-        Map<String, Object> model = new HashMap<>();
-        String username = request.session().attribute("username");
-        UserEntity userEntity = userController.getUserByUserName(username);
-        model.put("user", userEntity);
-
-        return new VelocityTemplateEngine().render(
-                new ModelAndView(model, "accountmanagment/manage.vm")
-        );
-    }
-
-    public Object processUpdate(Request request, Response response) {
-
-        String username = request.session().attribute("username");
-        UserEntity userEntity = userController.getUserByUserName(username);
-
-        String usernameUpdate = request.queryParams("username");
-        String passwordUpdate = request.queryParams("password");
-        String emailUpdate = request.queryParams("email");
-
-        boolean usernameChanged = false;
-
-        if (StringUtils.isNotEmpty(usernameUpdate)) {
-            if (!usernameUpdate.equals(userEntity.getLogin())) {
-                userEntity.setLogin(usernameUpdate);
-                usernameChanged = true;
-            }
-        }
-
-        if (StringUtils.isNotEmpty(passwordUpdate)) {
-            if (!passwordUpdate.equals(userEntity.getPassword())) {
-                userEntity.setPassword(passwordUpdate);
-            }
-        }
-
-        if (StringUtils.isNotEmpty(emailUpdate)) {
-            if (!emailUpdate.equals(userEntity.getEmail())) {
-                userEntity.setEmail(emailUpdate);
-            }
-        }
-
-        try {
-            userController.updateUserEntity(userEntity);
-
-            if (usernameChanged) {
-                request.session().attribute("username", usernameUpdate);
-            }
-        } catch (IllegalStateException ex) {
-            logger.error(String.valueOf(ex.getCause()));
-        }
-
-        response.redirect("/");
-
-        return null;
-    }
-
-
     public Object renderManageOthersPage(Request request, Response response) {
         Map<String, Object> model = new HashMap<>();
-        String username = request.session().attribute("username");
-        model.put("director", false);
 
-        model.put("allStores", storeController.getAllStores());
-
-        UserEntity userEntity = userController.getUserByUserName(username);
-        model.put("currUser", userEntity);
-
-        //needs refactoring
-        userEntity.getPrivilegeEntity().forEach(privilegeEntity -> {
-            if (privilegeEntity.getType() == 3) {
-                model.put("director", true);
-            }
-        });
-
+        modelHelper.putUserAndStore(request, model);
 
         return new VelocityTemplateEngine().render(
                 new ModelAndView(model, "accountmanagment/manageothers/manageothers.vm")
@@ -260,8 +119,6 @@ public class Routes {
 
         UsersRequest usersRequest = ApplicationEngine.provideGson().fromJson(request.body(), UsersRequest.class);
 
-        System.out.println("--------------STORE------------------------------------------- " + usersRequest.getStore());
-
         StoreEntity storeEntity = storeController.getStoreByName(usersRequest.getStore());
 
         ArrayList<UserEntity> users = userController.getAllUsersInStore(storeEntity);
@@ -270,7 +127,6 @@ public class Routes {
     }
 
     public Object getShops(Request request, Response response) {
-        Gson gson = new GsonBuilder().create();
         StoreController storeController = (StoreController) ControllerFactory.provideController(ControllerTypes.STORE_CONTROLLER.getType());
         ArrayList<StoreEntity> storeEntities = storeController.getAllStores();
 
@@ -320,7 +176,7 @@ public class Routes {
 
         UserEntity userEntity = userController.getUserByUserName(userName);
 
-        boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
+        Boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
 
         TransactionEntity transactionEntity = new TransactionEntity(userEntity, isApproved, new Date(), new Date(), 0);
 
@@ -331,13 +187,11 @@ public class Routes {
     }
 
     public Object updateTransactions(Request request, Response response) {
-        boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
+        Boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
         int transactionId = Integer.parseInt(request.queryParams("id"));
         String dateOfCreation = request.queryParams("dateOfCreation");
         String dateOfModification = request.queryParams("dateOfModification");
         int modifierId = Integer.parseInt(request.queryParams("modifierId"));
-
-        TransactionController transactionController = (TransactionController) ControllerFactory.provideController(ControllerTypes.TRANSACTION_CONTROLLER.getType());
 
         transactionController.updateTransaction(transactionId, modifierId, dateOfModification, isApproved);
 
@@ -362,6 +216,8 @@ public class Routes {
         String email = request.queryParams("email");
         int store = Integer.parseInt(request.queryParams("store"));
         int privilege = Integer.parseInt(request.queryParams("privilege"));
+
+        if(userName.equals(""))return "{\"Message\": \"Proszę ustawić nazwę użytkownika\"}";
 
         if(password.equals(passwordRepeat)){
             if(password.equals("")) password = userController.getUserById(ID).getPassword();

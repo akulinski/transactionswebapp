@@ -3,6 +3,7 @@ package com.mrowka.transactionswebapp.core.routers;
 import com.mrowka.transactionswebapp.core.ApplicationEngine;
 import com.mrowka.transactionswebapp.core.methods.Routes;
 import com.mrowka.transactionswebapp.util.Urls;
+import com.mrowka.transactionswebapp.util.UrlsProtected;
 import org.slf4j.Logger;
 
 import static spark.Spark.get;
@@ -22,29 +23,23 @@ public class Router {
         Routes routes = new Routes();
 
         get(Urls.INDEX.getUrl(), routes::mainSite);
-        get(Urls.TRANSACTIONS.getUrl(), routes::showTransactions);
-        get(Urls.GET_STORES.getUrl(), routes::getShops);
-        get(Urls.GET_USERS.getUrl(), routes::getUsers);
-
-        get(Urls.GET_TRANSACTIONS.getUrl(), routes::getTransactions);
-        get(Urls.UPDATE_TRANSACTIONS.getUrl(), routes::updateTransactions);
-        get(Urls.ADD_TRANSACTIONS.getUrl(), routes::addTransaction);
-
+        get(UrlsProtected.GET_STORES.getUrl(), routes::getShops);
+        get(UrlsProtected.GET_USERS.getUrl(), routes::getUsers);
+        //Transactions
+        get(UrlsProtected.TRANSACTIONS.getUrl(), routes::showTransactions);
+        get(UrlsProtected.GET_TRANSACTIONS.getUrl(), routes::getTransactions);
+        get(UrlsProtected.UPDATE_TRANSACTIONS.getUrl(), routes::updateTransactions);
+        get(UrlsProtected.ADD_TRANSACTIONS.getUrl(), routes::addTransaction);
+        //Login
         get(Urls.LOGIN.getUrl(), routes::showLoginPage);
-
         post(Urls.LOGIN.getUrl(), routes::processLoginRequest);
 
-        get(Urls.REGISTRATION.getUrl(), routes::renderRegistrationPage);
-        post(Urls.REGISTRATION.getUrl(), routes::processRegistrationPage);
-
-        get(Urls.MY_ACCOUNT.getUrl(), routes::renderManageAccountPage);
-        post(Urls.MY_ACCOUNT.getUrl(), routes::processUpdate);
-
-        get(Urls.MANAGE_OTHERS.getUrl(), routes::renderManageOthersPage);
-        post(Urls.USERS_IN_STORE_ENDPOINT.getUrl(), routes::getAllUsersInStore);
-        get(Urls.MANAGE_OTHERS_USERINFO.getUrl(), routes::manageOthersGetInfo);
-        get(Urls.MANAGE_OTHERS_UPDATEUSER.getUrl(), routes::manageOthersUpdateUser);
-        get(Urls.MANAGE_OTHERS_ADDUSER.getUrl(), routes::manageOthersAddUser);
+        //Manage users
+        get(UrlsProtected.MANAGE_OTHERS.getUrl(), routes::renderManageOthersPage);
+        post(UrlsProtected.USERS_IN_STORE_ENDPOINT.getUrl(), routes::getAllUsersInStore);
+        get(UrlsProtected.MANAGE_OTHERS_USERINFO.getUrl(), routes::manageOthersGetInfo);
+        get(UrlsProtected.MANAGE_OTHERS_UPDATEUSER.getUrl(), routes::manageOthersUpdateUser);
+        get(UrlsProtected.MANAGE_OTHERS_ADDUSER.getUrl(), routes::manageOthersAddUser);
 
     }
 
