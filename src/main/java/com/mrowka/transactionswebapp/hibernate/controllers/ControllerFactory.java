@@ -11,6 +11,7 @@ public class ControllerFactory {
     private static StoreController storeController = new StoreController(ApplicationEngine.provideFactory());
     private static TransactionController transactionController = new TransactionController(ApplicationEngine.provideFactory());
     private static UserController userController = new UserController(ApplicationEngine.provideFactory());
+    private static CashRegisterController cashRegisterController = new CashRegisterController(ApplicationEngine.provideFactory());
 
     public static GenericController provideController(String type) {
         switch (type.toLowerCase()) {
@@ -22,6 +23,8 @@ public class ControllerFactory {
                 return transactionController;
             case "privilege":
                 return privilegeController;
+            case "cash":
+                return cashRegisterController;
             default:
                 throw new IllegalStateException("No Controller found");
         }

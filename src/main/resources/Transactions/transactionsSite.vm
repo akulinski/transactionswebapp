@@ -65,7 +65,7 @@
             <div class="tabcontent" id="addTransactions">
                 <div class="mb-3 ml-1 d-flex col-sm-2">
                     <input type="button" onclick="addManyFields()" class="btn btn-primary" value="Dodaj"/>
-                    <input type="number" id="numberOfFields" class="form-control ml-2"/>
+                    <input type="cashNumber" id="numberOfFields" class="form-control ml-2"/>
                 </div>
                 <form id="Form" class="form-inline align-items-center">
                 </form>

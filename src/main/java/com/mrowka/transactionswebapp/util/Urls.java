@@ -4,8 +4,8 @@ public enum Urls {
 
     //Basic
     INDEX("/"),
-    LOGIN("/login");
-
+    LOGIN("/login"),
+    GET_ALL_CASHES("/getAllCashes");
     private String url;
 
     Urls(String url){

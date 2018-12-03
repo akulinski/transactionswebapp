@@ -3,12 +3,14 @@ package com.mrowka.transactionswebapp.core.methods;
 import com.mrowka.transactionswebapp.core.ApplicationEngine;
 import com.mrowka.transactionswebapp.core.validators.LoginValidator;
 import com.mrowka.transactionswebapp.hibernate.controllers.*;
+import com.mrowka.transactionswebapp.hibernate.entites.CashRegisterEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
 import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
 import com.mrowka.transactionswebapp.requestresponsemodel.UsersRequest;
 import com.mrowka.transactionswebapp.util.ControllerTypes;
 import com.mrowka.transactionswebapp.util.ModelHelper;
+import com.mrowka.transactionswebapp.util.TransactionUtils;
 import com.mrowka.transactionswebapp.util.Urls;
 import org.slf4j.Logger;
 import spark.ModelAndView;
@@ -33,12 +35,15 @@ public class Routes {
     private TransactionController transactionController;
     private Logger logger;
     private  ModelHelper modelHelper;
+    private CashRegisterController cashRegisterController;
 
     public Routes() {
         userController = (UserController) ControllerFactory.provideController(ControllerTypes.USER_CONTROLLER.getType());
         storeController = (StoreController) ControllerFactory.provideController(ControllerTypes.STORE_CONTROLLER.getType());
         privilegeController = (PrivilegeController) ControllerFactory.provideController(ControllerTypes.PRIVILEGE_CONTROLLER.getType());
         transactionController = (TransactionController) ControllerFactory.provideController(ControllerTypes.TRANSACTION_CONTROLLER.getType());
+        cashRegisterController = (CashRegisterController) ControllerFactory.provideController(ControllerTypes.CASH_REGISTER_CONTROLLER.getType());
+
         logger = ApplicationEngine.provideLogger();
         modelHelper = new ModelHelper();
     }
@@ -73,6 +78,7 @@ public class Routes {
     public Object showLoginPage(Request request, Response response) {
 
         Map<String, Object> model = new HashMap<>();
+        model.put("storeList",storeController.getAllStores());
         return new VelocityTemplateEngine().render(
                 new ModelAndView(model, "login/login.vm")
         );
@@ -81,10 +87,16 @@ public class Routes {
     public Object processLoginRequest(Request request, Response response) {
         String password = request.queryParams("password");
         String username = request.queryParams("username");
+        String cash = request.queryParams("cash-selector");
+        String store = request.queryParams("store-selector");
 
         if (LoginValidator.getInstance().validate(username, password)) {
 
             request.session().attribute("username", username);
+
+            request.session().attribute("cash",cash);
+
+            request.session().attribute("store",store);
 
             if (StringUtils.isNotEmpty(request.session().attribute("endpoint"))
                     && request.session().attribute("endpoint") != null) {
@@ -155,7 +167,9 @@ public class Routes {
         int selectId = Integer.parseInt(request.queryParams("selectId"));
         String userName = request.queryParams("selectUser");
 
+
         System.out.println("request params: " + dateFrom + dateTo + selectId + userName);
+
 
         UserEntity userEntity = userController.getUserByUserName(userName);
         if (userEntity == null) return null;
@@ -174,14 +188,39 @@ public class Routes {
     public Object addTransaction(Request request, Response response){
         String userName = request.queryParams("username");
 
-        UserEntity userEntity = userController.getUserByUserName(userName);
+        try {
 
-        Boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
+            Float fiskalnePlatnoscKartaKarta = Float.valueOf(request.queryParams("fiskalnePlatnoscKarta"));
+            Float kartyPayback = Float.valueOf(request.queryParams("kartyPayback"));
+            Float fiskalne = Float.valueOf(request.queryParams("fiskalne"));
+            Float zwroty = Float.valueOf(request.queryParams("zwroty"));
+            Float niefiskalne = Float.valueOf(request.queryParams("niefiskalne"));
 
-        TransactionEntity transactionEntity = new TransactionEntity(userEntity, isApproved, new Date(), new Date(), 0);
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+kartyPayback+" "+zwroty+" "+niefiskalne+" "+fiskalne+" "+fiskalnePlatnoscKartaKarta);
+            String store = request.session().attribute("store");
+            int cash =Integer.parseInt(request.session().attribute("cash"));
 
-        Integer transactionId = transactionController.addTransaction(userEntity, transactionEntity);
-        if(transactionId!=null)return "{\"Message\": \"Transakcja Zapisana\"}";
+            StoreEntity storeEntity = storeController.getStoreByName(store);
+            CashRegisterEntity cashRegisterEntity = cashRegisterController.findByStoreAndNumber(storeEntity,cash);
+
+            TransactionUtils.calcTransaction(cashRegisterEntity,fiskalnePlatnoscKartaKarta,kartyPayback,fiskalne,zwroty,niefiskalne);
+
+            cashRegisterController.updateCashRegister(cashRegisterEntity);
+
+            UserEntity userEntity = userController.getUserByUserName(userName);
+
+            Boolean isApproved = Boolean.valueOf(request.queryParams("isApproved"));
+
+            TransactionEntity transactionEntity = new TransactionEntity(userEntity,isApproved,new Date(),new Date(),0,kartyPayback,zwroty,niefiskalne,fiskalne,fiskalnePlatnoscKartaKarta);
+
+            transactionEntity.setCashRegisterEntity(cashRegisterEntity);
+
+            Integer transactionId = transactionController.addTransaction(userEntity, transactionEntity);
+            if(transactionId!=null)return "{\"Message\": \"Transakcja Zapisana\"}";
+
+        }catch (Exception e){
+            return "{\"Message\": \"Transakcja nie została zapisana\"}";
+        }
 
         return "{\"Message\": \"Transakcja nie została zapisana\"}";
     }
@@ -247,6 +286,16 @@ public class Routes {
         if(userController.addUserByEntity(userEntity, storeController.getStoreById(storeId))==null)return "{\"Message\": \"Nie udało się założyć konta\"}";
         privilegeController.addPrivilege(privilege, userEntity);
         return "{\"Message\": \"Udało się utworzyć użytkownika\"}";
+    }
+
+    public Object getAllCashes(Request request,Response response){
+
+
+        String store = request.queryParams("shopId");
+
+        StoreEntity storeEntity = storeController.getStoreByName(store);
+
+        return ApplicationEngine.provideGsonWithExcludions().toJson(storeEntity.getCashRegisterEntities());
     }
 }
 

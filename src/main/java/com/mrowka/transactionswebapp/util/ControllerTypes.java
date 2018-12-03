@@ -8,7 +8,8 @@ public enum ControllerTypes {
     USER_CONTROLLER("user"),
     PRIVILEGE_CONTROLLER("privilege"),
     STORE_CONTROLLER("store"),
-    TRANSACTION_CONTROLLER("transaction");
+    TRANSACTION_CONTROLLER("transaction"),
+    CASH_REGISTER_CONTROLLER("cash");
 
     private String type;
 
