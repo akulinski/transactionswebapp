@@ -41,6 +41,9 @@ public class Router {
         get(UrlsProtected.MANAGE_OTHERS_UPDATEUSER.getUrl(), routes::manageOthersUpdateUser);
         get(UrlsProtected.MANAGE_OTHERS_ADDUSER.getUrl(), routes::manageOthersAddUser);
 
+        //cashes
+        get(Urls.GET_ALL_CASHES.getUrl(),routes::getAllCashes);
+
     }
 
 }

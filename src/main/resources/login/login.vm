@@ -3,6 +3,7 @@
         <link rel='stylesheet' href='/bootstrap/bootstrap.css'>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <script src="/login/fetchCash.js"></script>
     </head>
     <body>
         #include("template/navLogin.vm")
@@ -19,6 +20,23 @@
                     <label for="">Password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="password">
                 </div>
+
+                <div class="col-auto my-1">
+                    <label for="">Sklep</label>
+                    <select class="form-control" id="store-selector" name="store-selector" onchange="onStoreSelect()">
+
+                    #foreach( $store in $storeList )
+                        <option value=$store.getStoreName()>$store.getStoreName()</option>
+                    #end
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Kasa</label>
+                    <select class="form-control" id="cash-selector" name="cash-selector"></select>
+                </div>
+
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-lg btn-dark">Zaloguj się</button>

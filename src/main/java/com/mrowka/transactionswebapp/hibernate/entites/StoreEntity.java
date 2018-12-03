@@ -38,6 +38,11 @@ public class StoreEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "storeEntity")
     private Set<UserEntity> userEntitySet;
 
+    @Fetch(FetchMode.SELECT)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "storeEntity")
+    private Set<CashRegisterEntity> cashRegisterEntities;
+
     public StoreEntity(String storeName, String address, boolean active) {
         this.storeName = storeName;
         this.address = address;
@@ -89,4 +94,11 @@ public class StoreEntity {
         this.userEntitySet = userEntitySet;
     }
 
+    public Set<CashRegisterEntity> getCashRegisterEntities() {
+        return cashRegisterEntities;
+    }
+
+    public void setCashRegisterEntities(Set<CashRegisterEntity> cashRegisterEntities) {
+        this.cashRegisterEntities = cashRegisterEntities;
+    }
 }

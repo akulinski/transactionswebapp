@@ -2,13 +2,8 @@ package com.mrowka.transactionswebapp.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import com.mrowka.transactionswebapp.core.interceptors.LoginInterceptor;
-
-import com.mrowka.transactionswebapp.hibernate.entites.PrivilegeEntity;
-import com.mrowka.transactionswebapp.hibernate.entites.StoreEntity;
-import com.mrowka.transactionswebapp.hibernate.entites.TransactionEntity;
-import com.mrowka.transactionswebapp.hibernate.entites.UserEntity;
+import com.mrowka.transactionswebapp.hibernate.entites.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
@@ -38,7 +33,7 @@ public class ApplicationEngine {
 
         if (factory == null) {
             synchronized (ApplicationEngine.class) {//synchronisation of different threads for random access
-                factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(StoreEntity.class).addAnnotatedClass(UserEntity.class).addAnnotatedClass(PrivilegeEntity.class).addAnnotatedClass(TransactionEntity.class).buildSessionFactory();
+                factory = new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(StoreEntity.class).addAnnotatedClass(UserEntity.class).addAnnotatedClass(PrivilegeEntity.class).addAnnotatedClass(TransactionEntity.class).addAnnotatedClass(CashRegisterEntity.class).buildSessionFactory();
             }
         }
 
